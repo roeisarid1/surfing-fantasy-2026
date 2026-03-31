@@ -414,9 +414,7 @@ async function viewStandings() {
     <div style="display:flex;gap:10px;align-items:center;margin-bottom:24px;flex-wrap:wrap">
       ${UI.sourceBadge(men.source)}
       <span style="font-size:12px;color:var(--text-dim)">
-        ${men.source === 'live' ? 'Fetched from worldsurfleague.com' :
-          men.source === 'override' ? 'Admin override active' :
-          'Using local JSON data'}
+        ${men.source === 'override' ? 'Admin override active' : 'Using local JSON data'}
       </span>
       <button class="btn btn-secondary btn-sm" id="btnRefresh" style="margin-left:auto">↻ Refresh</button>
     </div>
@@ -553,8 +551,6 @@ async function viewLeaderboard() {
 async function viewAdmin() {
   const menOverride   = Rankings.getOverride('men');
   const womenOverride = Rankings.getOverride('women');
-  const menCache      = Rankings.getCache('men');
-  const womenCache    = Rankings.getCache('women');
 
   function fmtDate(iso) {
     if (!iso) return 'never';
@@ -565,25 +561,6 @@ async function viewAdmin() {
     <div class="page-header">
       <h1>Admin</h1>
       <p>Manage rankings data and league settings.</p>
-    </div>
-
-    <!-- Fetch & Cache -->
-    <div class="card" style="margin-bottom:20px">
-      <h2 style="font-size:16px;font-weight:700;margin-bottom:16px">Live Data & Cache</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-        <div>
-          <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Men cache</div>
-          <div style="font-size:13px">${menCache ? fmtDate(menCache.fetchedAt) : 'No cache'}</div>
-        </div>
-        <div>
-          <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Women cache</div>
-          <div style="font-size:13px">${womenCache ? fmtDate(womenCache.fetchedAt) : 'No cache'}</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-primary btn-sm" id="btnFetchFresh">↻ Fetch Live Rankings</button>
-        <button class="btn btn-secondary btn-sm" id="btnClearCache">🗑 Clear Cache</button>
-      </div>
     </div>
 
     <!-- Override: Men -->
@@ -623,24 +600,6 @@ async function viewAdmin() {
       <button class="btn btn-danger btn-sm" id="btnWipeAll">🗑 Wipe All Data</button>
     </div>
   `);
-
-  // Fetch fresh
-  document.getElementById('btnFetchFresh')?.addEventListener('click', async () => {
-    Rankings.clearCache('men');
-    Rankings.clearCache('women');
-    UI.toast('Fetching live rankings…');
-    await Rankings.getBoth();
-    UI.toast('Done — rankings refreshed');
-    viewAdmin();
-  });
-
-  // Clear cache
-  document.getElementById('btnClearCache')?.addEventListener('click', () => {
-    Rankings.clearCache('men');
-    Rankings.clearCache('women');
-    UI.toast('Cache cleared');
-    viewAdmin();
-  });
 
   // Save men override
   document.getElementById('btnSaveMen')?.addEventListener('click', () => {
