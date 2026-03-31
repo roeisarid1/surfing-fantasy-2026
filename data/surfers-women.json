@@ -1,5 +1,5 @@
 [
-  { "name": "Carissa Moore",             "country": "USA" },
+  { "name": "Carissa Moore",            "country": "USA" },
   { "name": "Tyler Wright",             "country": "AUS" },
   { "name": "Caroline Marks",           "country": "USA" },
   { "name": "Molly Picklum",            "country": "AUS" },
@@ -12,5 +12,11 @@
   { "name": "Sally Fitzgibbons",        "country": "AUS" },
   { "name": "Lakey Peterson",           "country": "USA" },
   { "name": "Gabriela Bryan",           "country": "USA" },
-  { "name": "Luana Silva",              "country": "USA" }
+  { "name": "Luana Silva",              "country": "USA" },
+  { "name": "Malia Manuel",             "country": "USA" },
+  { "name": "Daniella Rosas",           "country": "PER" },
+  { "name": "Sofia Mulanovich",         "country": "PER" },
+  { "name": "Dimity Stoyle",            "country": "AUS" },
+  { "name": "Stephanie Gilmore",        "country": "AUS" },
+  { "name": "Erin Brooks",              "country": "CAN" }
 ]
