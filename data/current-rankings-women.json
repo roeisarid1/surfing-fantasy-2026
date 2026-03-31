@@ -1,0 +1,16 @@
+[
+  { "rank": 1,  "name": "Carissa Moore",            "country": "USA", "points": 48200 },
+  { "rank": 2,  "name": "Tyler Wright",             "country": "AUS", "points": 43100 },
+  { "rank": 3,  "name": "Caitlin Simmers",          "country": "USA", "points": 38600 },
+  { "rank": 4,  "name": "Caroline Marks",           "country": "USA", "points": 34200 },
+  { "rank": 5,  "name": "Molly Picklum",            "country": "AUS", "points": 30100 },
+  { "rank": 6,  "name": "Tatiana Weston-Webb",      "country": "BRA", "points": 26400 },
+  { "rank": 7,  "name": "Brisa Hennessy",           "country": "CRI", "points": 22800 },
+  { "rank": 8,  "name": "Bettylou Sakura Johnson",  "country": "USA", "points": 19500 },
+  { "rank": 9,  "name": "Isabella Nichols",         "country": "AUS", "points": 16700 },
+  { "rank": 10, "name": "Johanne Defay",            "country": "FRA", "points": 14200 },
+  { "rank": 11, "name": "Sally Fitzgibbons",        "country": "AUS", "points": 12000 },
+  { "rank": 12, "name": "Lakey Peterson",           "country": "USA", "points": 10100 },
+  { "rank": 13, "name": "Gabriela Bryan",           "country": "USA", "points":  8500 },
+  { "rank": 14, "name": "Luana Silva",              "country": "USA", "points":  7200 }
+]
