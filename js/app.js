@@ -549,6 +549,51 @@ async function viewLeaderboard() {
    VIEW: ADMIN
    ============================================================ */
 async function viewAdmin() {
+  // PIN check — stored as hash only, never as plaintext
+  const _h = 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f';
+  async function _chk(v) {
+    const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v));
+    return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,'0')).join('');
+  }
+
+  // Show PIN prompt view
+  if (!sessionStorage.getItem('_sa')) {
+    setView(`
+      <div style="max-width:320px;margin:80px auto">
+        <div class="card" style="text-align:center">
+          <div style="font-size:32px;margin-bottom:12px">🔒</div>
+          <h2 style="margin-bottom:20px">Admin Access</h2>
+          <div class="form-group">
+            <input type="password" id="pinInput" placeholder="Enter PIN" style="text-align:center;font-size:20px;letter-spacing:4px" maxlength="20" />
+          </div>
+          <button class="btn btn-primary" style="width:100%" id="pinSubmit">Enter</button>
+          <div id="pinError" style="color:var(--red);font-size:13px;margin-top:10px;min-height:18px"></div>
+        </div>
+      </div>
+    `);
+
+    const submit = async () => {
+      const val = document.getElementById('pinInput')?.value;
+      if (!val) return;
+      const h = await _chk(val);
+      if (h === _h) {
+        sessionStorage.setItem('_sa', '1');
+        viewAdmin();
+      } else {
+        document.getElementById('pinError').textContent = 'Incorrect PIN';
+        document.getElementById('pinInput').value = '';
+        document.getElementById('pinInput').focus();
+      }
+    };
+
+    document.getElementById('pinSubmit')?.addEventListener('click', submit);
+    document.getElementById('pinInput')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') submit();
+    });
+    document.getElementById('pinInput')?.focus();
+    return;
+  }
+
   const menOverride   = Rankings.getOverride('men');
   const womenOverride = Rankings.getOverride('women');
 
