@@ -111,6 +111,7 @@ async function viewDashboard() {
    ============================================================ */
 function viewParticipants() {
   function render() {
+    const isAdmin = !!sessionStorage.getItem('_sa');
     const list = Participants.getAll();
 
     const rows = list.map(p => {
@@ -130,8 +131,8 @@ function viewParticipants() {
             <a href="#/predictions/${UI.esc(p.id)}" class="btn btn-primary btn-sm">
               ${hasPicks ? (locked ? '👁 View' : '✏️ Edit') : '+ Picks'}
             </a>
-            <button class="btn btn-secondary btn-sm btn-rename" data-id="${UI.esc(p.id)}" data-name="${UI.esc(p.name)}">Rename</button>
-            <button class="btn btn-danger btn-sm btn-delete" data-id="${UI.esc(p.id)}" data-name="${UI.esc(p.name)}">✕</button>
+            ${isAdmin ? `<button class="btn btn-secondary btn-sm btn-rename" data-id="${UI.esc(p.id)}" data-name="${UI.esc(p.name)}">Rename</button>` : ''}
+            ${isAdmin ? `<button class="btn btn-danger btn-sm btn-delete" data-id="${UI.esc(p.id)}" data-name="${UI.esc(p.name)}">✕</button>` : ''}
           </div>
         </div>
       `;

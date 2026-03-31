@@ -58,7 +58,8 @@ const UI = {
       USA: '🇺🇸', AUS: '🇦🇺', BRA: '🇧🇷', RSA: '🇿🇦', ZAF: '🇿🇦',
       JPN: '🇯🇵', ITA: '🇮🇹', FRA: '🇫🇷', PRT: '🇵🇹', CRI: '🇨🇷',
       MAR: '🇲🇦', NZL: '🇳🇿', ESP: '🇪🇸', IDN: '🇮🇩', HAW: '🌺',
-      CAN: '🇨🇦', IND: '🇮🇳', MEX: '🇲🇽', ARG: '🇦🇷', CHL: '🇨🇱', PER: '🇵🇪'
+      CAN: '🇨🇦', IND: '🇮🇳', MEX: '🇲🇽', ARG: '🇦🇷', CHL: '🇨🇱', PER: '🇵🇪',
+      INA: '🇮🇩', CRC: '🇨🇷', POR: '🇵🇹', ISR: '🇮🇱', RSA: '🇿🇦'
     };
     return map[(code || '').toUpperCase()] || '🏳️';
   },
