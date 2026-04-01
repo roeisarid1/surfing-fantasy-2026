@@ -1,22 +1,25 @@
 /* ============================================================
-   rankings.js — Data provider for WSL rankings.
+   rankings.js — Rankings data provider.
 
-   Priority chain (highest → lowest):
-     1. Manual override (set via Admin page, stored in localStorage)
+   Priority:
+     1. Firestore override (set via Admin page, shared with everyone)
      2. Local JSON files (data/current-rankings-*.json)
 
-   Returns: { data: RankingEntry[], source: 'override'|'local'|'empty' }
-   RankingEntry: { rank, name, country, points }
+   Firestore collection: "overrides", documents: "men" / "women"
    ============================================================ */
+import { db, doc, getDoc, setDoc, deleteDoc } from './firebase.js';
 
-const Rankings = {
+export const Rankings = {
 
-  /* ---- Main entry point ---- */
   async get(gender) {
-    // 1. Manual override wins always
-    const override = Storage.get('rankings_override_' + gender);
-    if (override && override.data && override.data.length > 0) {
-      return { data: override.data, source: 'override' };
+    // 1. Firestore override
+    try {
+      const snap = await getDoc(doc(db, 'overrides', gender));
+      if (snap.exists() && snap.data().data?.length > 0) {
+        return { data: snap.data().data, source: 'override' };
+      }
+    } catch (e) {
+      console.warn('[Rankings] Firestore override read failed:', e.message);
     }
 
     // 2. Local JSON
@@ -26,34 +29,30 @@ const Rankings = {
       const data = await res.json();
       return { data, source: 'local' };
     } catch (e) {
-      console.warn('[Rankings] JSON load failed.', e.message);
+      console.warn('[Rankings] JSON load failed:', e.message);
     }
 
     return { data: [], source: 'empty' };
   },
 
-  /* ---- Fetch both genders in parallel ---- */
   async getBoth() {
-    const [men, women] = await Promise.all([
-      this.get('men'),
-      this.get('women')
-    ]);
+    const [men, women] = await Promise.all([this.get('men'), this.get('women')]);
     return { men, women };
   },
 
-  /* ---- Admin: set/clear override ---- */
-  setOverride(gender, data) {
-    Storage.set('rankings_override_' + gender, {
+  async setOverride(gender, data) {
+    await setDoc(doc(db, 'overrides', gender), {
       updatedAt: new Date().toISOString(),
       data
     });
   },
 
-  clearOverride(gender) {
-    Storage.remove('rankings_override_' + gender);
+  async clearOverride(gender) {
+    await deleteDoc(doc(db, 'overrides', gender));
   },
 
-  getOverride(gender) {
-    return Storage.get('rankings_override_' + gender);
+  async getOverride(gender) {
+    const snap = await getDoc(doc(db, 'overrides', gender));
+    return snap.exists() ? snap.data() : null;
   }
 };

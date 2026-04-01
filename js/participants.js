@@ -1,83 +1,70 @@
 /* ============================================================
-   participants.js — Participant CRUD + prediction management
+   participants.js — Firestore CRUD for participants & predictions
+   Collections: "participants", "predictions"
    ============================================================ */
+import { db, collection, doc, getDoc, getDocs, setDoc, deleteDoc } from './firebase.js';
 
-const Participants = {
+export const Participants = {
 
-  LOCK_MS: 60 * 60 * 1000, // 1 hour in milliseconds
+  LOCK_MS: 60 * 60 * 1000,
 
-  /* ---- Participant CRUD ---- */
+  /* ---- Participants ---- */
 
-  getAll() {
-    return Storage.get('participants') || [];
+  async getAll() {
+    const snap = await getDocs(collection(db, 'participants'));
+    return snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   },
 
-  getById(id) {
-    return this.getAll().find(p => p.id === id) || null;
+  async getById(id) {
+    const snap = await getDoc(doc(db, 'participants', id));
+    return snap.exists() ? { id: snap.id, ...snap.data() } : null;
   },
 
-  add(name) {
+  async add(name) {
     const trimmed = name.trim();
     if (!trimmed) return null;
-    const list = this.getAll();
-    const p = {
-      id: Date.now().toString(),
-      name: trimmed,
-      createdAt: new Date().toISOString()
-    };
-    list.push(p);
-    Storage.set('participants', list);
+    const id = Date.now().toString();
+    const p = { id, name: trimmed, createdAt: new Date().toISOString() };
+    await setDoc(doc(db, 'participants', id), p);
     return p;
   },
 
-  update(id, name) {
+  async update(id, name) {
     const trimmed = name.trim();
-    if (!trimmed) return false;
-    const list = this.getAll();
-    const p = list.find(p => p.id === id);
-    if (!p) return false;
-    p.name = trimmed;
-    Storage.set('participants', list);
-    return true;
+    if (!trimmed) return;
+    await setDoc(doc(db, 'participants', id), { name: trimmed }, { merge: true });
   },
 
-  delete(id) {
-    const list = this.getAll().filter(p => p.id !== id);
-    Storage.set('participants', list);
-    Storage.remove('predictions_' + id);
+  async delete(id) {
+    await deleteDoc(doc(db, 'participants', id));
+    await deleteDoc(doc(db, 'predictions', id));
   },
 
   /* ---- Predictions ---- */
 
-  getPredictions(id) {
-    return Storage.get('predictions_' + id) || null;
+  async getPredictions(id) {
+    const snap = await getDoc(doc(db, 'predictions', id));
+    return snap.exists() ? snap.data() : null;
   },
 
-  // Save predictions. First save sets submittedAt; subsequent saves within
-  // the lock window preserve the original submittedAt.
-  savePredictions(id, men, women) {
-    const existing = this.getPredictions(id);
+  // First save sets submittedAt; subsequent saves within lock window preserve it
+  async savePredictions(id, men, women) {
+    const existing = await this.getPredictions(id);
     const submittedAt = existing ? existing.submittedAt : new Date().toISOString();
-    const data = { submittedAt, men, women };
-    Storage.set('predictions_' + id, data);
-    return data;
+    await setDoc(doc(db, 'predictions', id), { submittedAt, men, women });
+    return { submittedAt, men, women };
   },
 
-  isLocked(id) {
-    const pred = this.getPredictions(id);
-    if (!pred) return false;
-    return Date.now() - new Date(pred.submittedAt).getTime() >= this.LOCK_MS;
+  isLocked(submittedAt) {
+    if (!submittedAt) return false;
+    return Date.now() - new Date(submittedAt).getTime() >= this.LOCK_MS;
   },
 
-  // Milliseconds remaining before lock (0 if already locked or no predictions)
-  msUntilLock(id) {
-    const pred = this.getPredictions(id);
-    if (!pred) return 0;
-    const elapsed = Date.now() - new Date(pred.submittedAt).getTime();
+  msUntilLock(submittedAt) {
+    if (!submittedAt) return 0;
+    const elapsed = Date.now() - new Date(submittedAt).getTime();
     return Math.max(0, this.LOCK_MS - elapsed);
-  },
-
-  hasSubmitted(id) {
-    return !!this.getPredictions(id);
   }
 };

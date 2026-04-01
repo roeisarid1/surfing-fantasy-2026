@@ -1,32 +1,15 @@
 /* ============================================================
-   storage.js — localStorage helpers
-   All keys are prefixed with "sf_" to avoid collisions.
+   storage.js — Only used for PIN session (sessionStorage).
+   All app data now lives in Firestore.
    ============================================================ */
-
-const Storage = {
-  get(key) {
-    try {
-      const raw = localStorage.getItem('sf_' + key);
-      return raw ? JSON.parse(raw) : null;
-    } catch {
-      return null;
-    }
+export const Storage = {
+  isAdmin() {
+    return !!sessionStorage.getItem('_sa');
   },
-
-  set(key, value) {
-    try {
-      localStorage.setItem('sf_' + key, JSON.stringify(value));
-    } catch (e) {
-      console.warn('Storage.set failed:', e);
-    }
+  setAdmin() {
+    sessionStorage.setItem('_sa', '1');
   },
-
-  remove(key) {
-    localStorage.removeItem('sf_' + key);
-  },
-
-  clear() {
-    const keys = Object.keys(localStorage).filter(k => k.startsWith('sf_'));
-    keys.forEach(k => localStorage.removeItem(k));
+  clearAdmin() {
+    sessionStorage.removeItem('_sa');
   }
 };
