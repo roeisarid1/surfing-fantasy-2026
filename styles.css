@@ -7,28 +7,28 @@
 
 /* ---------- CSS Variables ---------- */
 :root {
-  --bg:          #1a1a14;
-  --surface:     #22221a;
-  --card:        #2a2a20;
-  --card-hover:  #303026;
-  --border:      #3d3d2e;
-  --accent:      #4ecdc4;
-  --accent-dim:  #38b2aa;
-  --gold:        #f6c90e;
-  --green:       #7ecb8f;
-  --green-dim:   #5ab36b;
-  --yellow:      #f6c90e;
-  --yellow-dim:  #d4ac0b;
-  --red:         #e05c5c;
-  --red-dim:     #c44;
-  --text:        #f0ead6;
-  --text-muted:  #a09880;
-  --text-dim:    #6b6450;
-  --sand:        #e8dfc0;
-  --coral:       #e8735a;
+  --bg:          #e8f4f0;
+  --surface:     #d4ecec;
+  --card:        #ffffff;
+  --card-hover:  #f0fafa;
+  --border:      #b8d8d8;
+  --accent:      #1a8c82;
+  --accent-dim:  #156e66;
+  --gold:        #e8970a;
+  --green:       #2a9d58;
+  --green-dim:   #1f7a42;
+  --yellow:      #e8970a;
+  --yellow-dim:  #c47d08;
+  --red:         #d94f3a;
+  --red-dim:     #b83e2c;
+  --text:        #1a2e2c;
+  --text-muted:  #4a706c;
+  --text-dim:    #7a9e9a;
+  --sand:        #1a2e2c;
+  --coral:       #d9604a;
   --radius:      8px;
   --radius-sm:   5px;
-  --shadow:      0 4px 24px rgba(0,0,0,0.5);
+  --shadow:      0 4px 24px rgba(0,0,0,0.12);
   --nav-h:       64px;
   --font-display: 'Alfa Slab One', serif;
   --font-body:    'Nunito', sans-serif;
@@ -41,8 +41,10 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   background-image:
-    radial-gradient(ellipse at 20% 0%, rgba(78,205,196,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 100%, rgba(232,115,90,0.05) 0%, transparent 60%);
+    radial-gradient(ellipse at 20% 0%, rgba(26,140,130,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 100%, rgba(217,96,74,0.08) 0%, transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='200' viewBox='0 0 800 200'%3E%3Cpath d='M0 100 Q100 60 200 100 Q300 140 400 100 Q500 60 600 100 Q700 140 800 100' fill='none' stroke='%231a8c82' stroke-width='1.5' opacity='0.07'/%3E%3Cpath d='M0 130 Q100 90 200 130 Q300 170 400 130 Q500 90 600 130 Q700 170 800 130' fill='none' stroke='%231a8c82' stroke-width='1' opacity='0.05'/%3E%3C/svg%3E");
+  background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-body);
   font-size: 15px;
@@ -75,8 +77,8 @@ h1, h2, h3 { line-height: 1.2; }
   top: 0;
   z-index: 100;
   height: var(--nav-h);
-  background: var(--surface);
-  border-bottom: 2px solid var(--border);
+  background: #1a8c82;
+  border-bottom: 2px solid #156e66;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -107,12 +109,12 @@ h1, h2, h3 { line-height: 1.2; }
 .nav__title {
   font-family: var(--font-display);
   font-size: 17px;
-  color: var(--sand);
+  color: #ffffff;
   letter-spacing: 0.5px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-.nav__year { color: var(--accent); }
+.nav__year { color: #a8ede8; }
 
 .nav__links {
   display: flex;
@@ -121,7 +123,7 @@ h1, h2, h3 { line-height: 1.2; }
 }
 
 .nav__link {
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.7);
   padding: 6px 14px;
   border-radius: var(--radius-sm);
   font-size: 13px;
@@ -130,18 +132,18 @@ h1, h2, h3 { line-height: 1.2; }
   letter-spacing: 0.6px;
   transition: color .2s, background .2s;
 }
-.nav__link:hover { color: var(--text); background: var(--card); }
+.nav__link:hover { color: #fff; background: rgba(255,255,255,0.15); }
 .nav__link.active {
-  color: var(--accent);
-  background: rgba(78,205,196,0.1);
-  border-bottom: 2px solid var(--accent);
+  color: #fff;
+  background: rgba(255,255,255,0.2);
+  border-bottom: 2px solid #fff;
 }
 
 .nav__burger {
   display: none;
   background: none;
   border: none;
-  color: var(--text);
+  color: #fff;
   font-size: 22px;
   padding: 4px 8px;
 }
@@ -545,8 +547,8 @@ td { padding: 12px 14px; vertical-align: middle; }
   font-size: 13px;
   min-height: 180px;
   resize: vertical;
-  background: var(--bg);
-  color: #8ecfcc;
+  background: #f0fafa;
+  color: #1a5e58;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 12px;
@@ -629,8 +631,8 @@ td { padding: 12px 14px; vertical-align: middle; }
     flex-direction: column;
     position: absolute;
     top: var(--nav-h); left: 0; right: 0;
-    background: var(--surface);
-    border-bottom: 2px solid var(--border);
+    background: #1a8c82;
+    border-bottom: 2px solid #156e66;
     padding: 12px 0;
     gap: 0; z-index: 99;
   }
