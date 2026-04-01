@@ -94,7 +94,7 @@ async function viewDashboard() {
           <h2 style="font-size:17px;font-weight:700">Fantasy Leaderboard</h2>
           ${UI.sourceBadge(men.source)}
         </div>
-        ${leaderboard.length === 0
+        ${participants.length === 0
           ? `<div class="empty-state">
               <div class="empty-state__icon">🏆</div>
               <div class="empty-state__title">No participants yet</div>
@@ -102,7 +102,7 @@ async function viewDashboard() {
               <a href="#/participants" class="btn btn-primary">Add Participants</a>
              </div>`
           : `<div>${topRows}</div>
-             ${leaderboard.length > 5
+             ${started && leaderboard.length > 5
                ? `<div style="text-align:center;margin-top:12px">
                     <a href="#/leaderboard" class="btn btn-secondary btn-sm">View full leaderboard →</a>
                   </div>` : ''}`}
