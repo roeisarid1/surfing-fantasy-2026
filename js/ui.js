@@ -72,11 +72,11 @@ export const UI = {
     return `<span class="source-badge source-badge--${cls}"><span class="source-dot"></span>${this.esc(label)}</span>`;
   },
 
-  rankingsTable(data, topN) {
+  rankingsTable(data) {
     if (!data || data.length === 0) {
       return `<div class="empty-state"><div class="empty-state__icon">🌊</div><div class="empty-state__title">No rankings data</div><div class="empty-state__desc">Update via Admin page.</div></div>`;
     }
-    const rows = data.slice(0, Math.max(topN + 5, 15)).map(s => `
+    const rows = data.map(s => `
       <tr>
         <td>${this.rankBadge(s.rank)}</td>
         <td><span style="margin-right:6px">${this.flag(s.country)}</span><strong>${this.esc(s.name)}</strong></td>
