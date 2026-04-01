@@ -13,6 +13,11 @@ import { db, collection, getDocs, onSnapshot } from './firebase.js';
 // Expose Scoring to UI.breakdownTable
 window._Scoring = Scoring;
 
+// Returns true once at least one surfer has points > 0
+function seasonHasStarted(menData, womenData) {
+  return [...menData, ...womenData].some(s => s.points > 0);
+}
+
 // Active Firestore real-time unsubscribe
 let _unsub = null;
 function clearListener() { if (_unsub) { _unsub(); _unsub = null; } }
@@ -40,17 +45,24 @@ async function viewDashboard() {
     const predictionsMap = {};
     predSnap.forEach(d => { predictionsMap[d.id] = d.data(); });
 
-    const leaderboard = Scoring.buildLeaderboard(participants, predictionsMap, men.data, women.data);
+    const started     = seasonHasStarted(men.data, women.data);
+    const leaderboard = started ? Scoring.buildLeaderboard(participants, predictionsMap, men.data, women.data) : [];
     const submitted   = participants.filter(p => predictionsMap[p.id]).length;
 
-    const topRows = leaderboard.slice(0, 5).map(row => `
-      <div class="dash-leader-row">
-        ${UI.rankBadge(row.displayRank)}
-        <span class="dash-leader-row__name">${UI.esc(row.participant.name)}</span>
-        ${row.hasPredictions
-          ? `<span class="dash-leader-row__score">${row.score.total} pts</span>`
-          : `<span class="pill pill--gray">No picks</span>`}
-      </div>`).join('');
+    const topRows = started
+      ? leaderboard.slice(0, 5).map(row => `
+          <div class="dash-leader-row">
+            ${UI.rankBadge(row.displayRank)}
+            <span class="dash-leader-row__name">${UI.esc(row.participant.name)}</span>
+            ${row.hasPredictions
+              ? `<span class="dash-leader-row__score">${row.score.total} pts</span>`
+              : `<span class="pill pill--gray">No picks</span>`}
+          </div>`).join('')
+      : `<div class="empty-state" style="padding:28px 20px">
+           <div class="empty-state__icon">🌊</div>
+           <div class="empty-state__title">Season hasn't started yet</div>
+           <div class="empty-state__desc">Scores will appear once the first event rankings are updated.</div>
+         </div>`;
 
     document.getElementById('app').innerHTML = `
       <div class="page-header">
@@ -412,7 +424,20 @@ async function viewLeaderboard() {
     const predictionsMap = {};
     predSnap.forEach(d => { predictionsMap[d.id] = d.data(); });
 
-    const leaderboard = Scoring.buildLeaderboard(participants, predictionsMap, men.data, women.data);
+    const started     = seasonHasStarted(men.data, women.data);
+    const leaderboard = started ? Scoring.buildLeaderboard(participants, predictionsMap, men.data, women.data) : [];
+
+    if (!started) {
+      document.getElementById('app').innerHTML = `
+        <div class="page-header"><h1>Fantasy Leaderboard</h1></div>
+        <div class="empty-state">
+          <div class="empty-state__icon">🌊</div>
+          <div class="empty-state__title">Season hasn't started yet</div>
+          <div class="empty-state__desc">Scores will appear once the first event rankings are updated.</div>
+          <a href="#/participants" class="btn btn-primary">View Participants</a>
+        </div>`;
+      return;
+    }
 
     if (leaderboard.length === 0) {
       document.getElementById('app').innerHTML = `
