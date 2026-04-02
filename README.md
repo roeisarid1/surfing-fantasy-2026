@@ -1,53 +1,16 @@
 # 🏄 Fantasy Surf League 2026
 
-A static, frontend-only fantasy surfing league web app. Predict WSL Championship Tour final rankings — men's Top 5 and women's Top 3 — and compete with friends throughout the season.
+A fantasy surfing league web app for predicting WSL Championship Tour final rankings — men's Top 5 and women's Top 3 — and competing with friends throughout the season.
 
-**No backend. No server. Runs entirely in the browser.**
-
----
-
-## Quick Start (Local)
-
-You need a local HTTP server (required for `fetch()` to load JSON data files).
-
-**Option A — VS Code:**
-Install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension, right-click `index.html` → "Open with Live Server".
-
-**Option B — Python:**
-```bash
-cd SurfingFantasy
-python -m http.server 8080
-# Open http://localhost:8080
-```
-
-**Option C — Node.js:**
-```bash
-npx serve .
-```
-
-> Opening `index.html` directly via `file://` will work for navigation, but rankings data fetch may be blocked by browser security. Use a local server for the full experience.
+Backed by **Firebase Firestore** for real-time shared data — all participants, predictions, and admin overrides are synced instantly across every device.
 
 ---
 
-## Deploying to GitHub Pages
+## Live App
 
-1. **Create a new GitHub repository** (e.g. `surfing-fantasy-2026`).
+**[https://roeisarid1.github.io/surfing-fantasy-2026/](https://roeisarid1.github.io/surfing-fantasy-2026/)**
 
-2. **Initialize and push:**
-```bash
-cd SurfingFantasy
-git init
-git add .
-git commit -m "Initial commit: Fantasy Surf League 2026"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/surfing-fantasy-2026.git
-git push -u origin main
-```
-
-3. **Enable GitHub Pages:**
-   - Go to your repo → Settings → Pages
-   - Source: `Deploy from a branch` → Branch: `main` → Folder: `/ (root)`
-   - Save. Your app will be live at `https://YOUR_USERNAME.github.io/surfing-fantasy-2026/`
+No installation or local server needed — just open the link in any browser.
 
 ---
 
@@ -87,18 +50,26 @@ Maximum possible score: **37 points**
 
 ---
 
-## Updating Rankings
+## Firebase Integration
 
-The app tries to fetch live rankings from worldsurfleague.com on every load (via CORS proxy). If that fails, it falls back to local JSON.
+Participant data, predictions, and admin ranking overrides are stored in **Firebase Firestore**. This means:
+
+- All users see the same data in real time — no refresh needed
+- Picks and participants persist across devices and sessions
+- Admin overrides update the leaderboard instantly for everyone
+
+---
+
+## Updating Rankings
 
 **To manually update after each WSL event:**
 
-### Option A: Admin Override (no file editing needed)
+### Option A: Admin Override (recommended)
 1. Go to the **Admin** page in the app
 2. Paste updated JSON into the Men or Women override boxes
-3. Click Save — the leaderboard updates instantly
+3. Click Save — the leaderboard updates instantly for all users via Firestore
 
-### Option B: Update JSON files (for permanent updates)
+### Option B: Update JSON files (fallback only)
 Edit `data/current-rankings-men.json` and `data/current-rankings-women.json`:
 
 ```json
@@ -136,12 +107,12 @@ Country codes: `USA`, `AUS`, `BRA`, `RSA`, `JPN`, `ITA`, `FRA`, `PRT`, `CRI`, `M
 ```
 SurfingFantasy/
 ├── index.html              # App shell + nav
-├── styles.css              # Dark dashboard theme
+├── styles.css              # Surf theme styles
 ├── js/
-│   ├── storage.js          # localStorage helpers
+│   ├── firebase.js         # Firebase init + Firestore exports
 │   ├── scoring.js          # Pure scoring functions
-│   ├── participants.js     # Participant CRUD
-│   ├── rankings.js         # Data provider (fetch → JSON fallback)
+│   ├── participants.js     # Firestore participant CRUD
+│   ├── rankings.js         # Data provider (Firestore overrides → JSON fallback)
 │   ├── router.js           # Hash-based router
 │   ├── ui.js               # DOM helpers, toast, tables
 │   └── app.js              # Views + bootstrap
@@ -155,11 +126,8 @@ SurfingFantasy/
 
 ---
 
-## Data Sources
+## Tech Stack
 
-- Live rankings: [worldsurfleague.com](https://www.worldsurfleague.com) via CORS proxy
-- Fallback: local JSON files (manually maintained)
-
----
-
-Built with plain HTML, CSS, and vanilla JavaScript. No dependencies.
+- Plain HTML, CSS, and vanilla JavaScript — no framework, no build tools
+- [Firebase Firestore](https://firebase.google.com/docs/firestore) for real-time shared state
+- Hosted on GitHub Pages
