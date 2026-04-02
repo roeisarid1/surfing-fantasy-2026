@@ -50,6 +50,49 @@ Maximum possible score: **37 points**
 
 ---
 
+## Rules
+
+### The Goal
+Each participant predicts the **WSL Championship Tour final standings** before the season locks. The closer your predictions are to the actual end-of-season results, the more points you score.
+
+### What You Predict
+- **Men:** Final top 5 surfers, in exact order (1st through 5th)
+- **Women:** Final top 3 surfers, in exact order (1st through 3rd)
+
+### How Points Are Calculated
+
+**Men's Top 5 — per surfer predicted:**
+| Your prediction vs. actual result | Points |
+|---|---|
+| Predicted World Champion (1st) AND they won | 7 pts |
+| Exact position match (2nd–5th) | 5 pts |
+| Off by 1 position | 3 pts |
+| Off by 2 positions | 2 pts |
+| Off by 3+ positions but still in top 5 | 1 pt |
+| Surfer finished outside top 5 | 0 pts |
+
+**Women's Top 3 — per surfer predicted:**
+| Your prediction vs. actual result | Points |
+|---|---|
+| Predicted World Champion (1st) AND they won | 4 pts |
+| Exact position match (2nd–3rd) | 3 pts |
+| Off by 1 position or still in top 3 | 1 pt |
+| Surfer finished outside top 3 | 0 pts |
+
+**Maximum possible score: 37 points**
+(35 from men + 12 from women — only achievable with a perfect prediction)
+
+### Deadlines & Locking
+- Picks can be submitted or changed at any time **before the season starts**
+- Once submitted, you have a **1-hour grace period** to make changes
+- After that, picks are **locked for the season**
+
+### Leaderboard
+- The leaderboard is hidden until the season begins (first real points appear in WSL standings)
+- Scores update automatically after each WSL event as rankings change
+
+---
+
 ## Firebase Integration
 
 Participant data, predictions, and admin ranking overrides are stored in **Firebase Firestore**. This means:
