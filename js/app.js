@@ -92,7 +92,10 @@ async function viewDashboard() {
       <div class="card" style="margin-bottom:20px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
           <h2 style="font-size:17px;font-weight:700">Fantasy Leaderboard</h2>
-          ${UI.sourceBadge(men.source)}
+          <div style="display:flex;align-items:center;gap:8px">
+            ${UI.sourceBadge(men.source)}
+            <a href="#/leaderboard" class="btn btn-secondary btn-sm">View</a>
+          </div>
         </div>
         ${participants.length === 0
           ? `<div class="empty-state">
