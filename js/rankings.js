@@ -24,7 +24,7 @@ export const Rankings = {
 
     // 2. Local JSON
     try {
-      const res = await fetch('data/current-rankings-' + gender + '.json');
+      const res = await fetch('data/current-rankings-' + gender + '.json?v=' + Date.now());
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       return { data, source: 'local' };
