@@ -1,206 +1,41 @@
 [
-  {
-    "rank": 1,
-    "name": "Yago Dora",
-    "country": "BRA",
-    "points": 0
-  },
-  {
-    "rank": 2,
-    "name": "Griffin Colapinto",
-    "country": "USA",
-    "points": 0
-  },
-  {
-    "rank": 3,
-    "name": "Jordy Smith",
-    "country": "RSA",
-    "points": 0
-  },
-  {
-    "rank": 4,
-    "name": "Italo Ferreira",
-    "country": "BRA",
-    "points": 0
-  },
-  {
-    "rank": 5,
-    "name": "Jack Robinson",
-    "country": "AUS",
-    "points": 0
-  },
-  {
-    "rank": 6,
-    "name": "Ethan Ewing",
-    "country": "AUS",
-    "points": 0
-  },
-  {
-    "rank": 7,
-    "name": "Kanoa Igarashi",
-    "country": "JPN",
-    "points": 0
-  },
+  { "rank": 1, "name": "Miguel Pupo", "country": "BRA", "points": 10000 },
+  { "rank": 2, "name": "Yago Dora", "country": "BRA", "points": 7800 },
+  { "rank": 3, "name": "Gabriel Medina", "country": "BRA", "points": 6085 },
+  { "rank": 4, "name": "Griffin Colapinto", "country": "USA", "points": 6085 },
+  { "rank": 5, "name": "Samuel Pupo", "country": "BRA", "points": 4745 },
+  { "rank": 6, "name": "Kanoa Igarashi", "country": "JPN", "points": 4745 },
+  { "rank": 7, "name": "Barron Mamiya", "country": "HAW", "points": 4745 },
   {
     "rank": 8,
-    "name": "Filipe Toledo",
-    "country": "BRA",
-    "points": 0
-  },
-  {
-    "rank": 9,
     "name": "Leonardo Fioravanti",
     "country": "ITA",
-    "points": 0
+    "points": 4745
   },
-  {
-    "rank": 10,
-    "name": "Cole Houshmand",
-    "country": "USA",
-    "points": 0
-  },
-  {
-    "rank": 11,
-    "name": "Barron Mamiya",
-    "country": "HAW",
-    "points": 0
-  },
-  {
-    "rank": 12,
-    "name": "Connor O'Leary",
-    "country": "JPN",
-    "points": 0
-  },
-  {
-    "rank": 13,
-    "name": "Gabriel Medina",
-    "country": "BRA",
-    "points": 0
-  },
-  {
-    "rank": 14,
-    "name": "Miguel Pupo",
-    "country": "BRA",
-    "points": 0
-  },
-  {
-    "rank": 15,
-    "name": "Jake Marshall",
-    "country": "USA",
-    "points": 0
-  },
-  {
-    "rank": 16,
-    "name": "Crosby Colapinto",
-    "country": "USA",
-    "points": 0
-  },
-  {
-    "rank": 17,
-    "name": "Marco Mignot",
-    "country": "FRA",
-    "points": 0
-  },
-  {
-    "rank": 18,
-    "name": "Joao Chianca",
-    "country": "BRA",
-    "points": 0
-  },
-  {
-    "rank": 19,
-    "name": "Joel Vaughan",
-    "country": "AUS",
-    "points": 0
-  },
-  {
-    "rank": 20,
-    "name": "Alan Cleland",
-    "country": "MEX",
-    "points": 0
-  },
-  {
-    "rank": 21,
-    "name": "Rio Waida",
-    "country": "INA",
-    "points": 0
-  },
-  {
-    "rank": 22,
-    "name": "Seth Moniz",
-    "country": "HAW",
-    "points": 0
-  },
-  {
-    "rank": 23,
-    "name": "Alejo Muniz",
-    "country": "BRA",
-    "points": 0
-  },
-  {
-    "rank": 24,
-    "name": "Kauli Vaast",
-    "country": "FRA",
-    "points": 0
-  },
-  {
-    "rank": 25,
-    "name": "Eli Hanneman",
-    "country": "HAW",
-    "points": 0
-  },
-  {
-    "rank": 26,
-    "name": "Morgan Cibilic",
-    "country": "AUS",
-    "points": 0
-  },
-  {
-    "rank": 27,
-    "name": "George Pittar",
-    "country": "AUS",
-    "points": 0
-  },
-  {
-    "rank": 28,
-    "name": "Samuel Pupo",
-    "country": "BRA",
-    "points": 0
-  },
-  {
-    "rank": 29,
-    "name": "Callum Robson",
-    "country": "AUS",
-    "points": 0
-  },
-  {
-    "rank": 30,
-    "name": "Luke Thompson",
-    "country": "RSA",
-    "points": 0
-  },
-  {
-    "rank": 31,
-    "name": "Oscar Berry",
-    "country": "AUS",
-    "points": 0
-  },
-  {
-    "rank": 32,
-    "name": "Mateus Herdy",
-    "country": "BRA",
-    "points": 0
-  },
-  {
-    "rank": 33,
-    "name": "Liam O'Brien",
-    "country": "AUS",
-    "points": 0
-  },
-  {
-    "rank": 34,
-    "name": "Ramzi Boukhiam",
-    "country": "MAR",
-    "points": 0
-  }
+  { "rank": 9, "name": "George Pittar", "country": "AUS", "points": 3320 },
+  { "rank": 10, "name": "Filipe Toledo", "country": "BRA", "points": 3320 },
+  { "rank": 11, "name": "Italo Ferreira", "country": "BRA", "points": 3320 },
+  { "rank": 12, "name": "Jordy Smith", "country": "RSA", "points": 3320 },
+  { "rank": 13, "name": "Rio Waida", "country": "INA", "points": 3320 },
+  { "rank": 14, "name": "Marco Mignot", "country": "FRA", "points": 3320 },
+  { "rank": 15, "name": "Jake Marshall", "country": "USA", "points": 3320 },
+  { "rank": 16, "name": "Alejo Muniz", "country": "BRA", "points": 3320 },
+  { "rank": 17, "name": "Luke Thompson", "country": "RSA", "points": 1000 },
+  { "rank": 18, "name": "Ethan Ewing", "country": "AUS", "points": 1000 },
+  { "rank": 19, "name": "Mateus Herdy", "country": "BRA", "points": 1000 },
+  { "rank": 20, "name": "Joel Vaughan", "country": "AUS", "points": 1000 },
+  { "rank": 21, "name": "Connor O'Leary", "country": "JPN", "points": 1000 },
+  { "rank": 22, "name": "Kauli Vaast", "country": "FRA", "points": 1000 },
+  { "rank": 23, "name": "Morgan Cibilic", "country": "AUS", "points": 1000 },
+  { "rank": 24, "name": "Joao Chianca", "country": "BRA", "points": 1000 },
+  { "rank": 25, "name": "Crosby Colapinto", "country": "USA", "points": 1000 },
+  { "rank": 26, "name": "Eli Hanneman", "country": "HAW", "points": 1000 },
+  { "rank": 27, "name": "Seth Moniz", "country": "HAW", "points": 1000 },
+  { "rank": 28, "name": "Cole Houshmand", "country": "USA", "points": 1000 },
+  { "rank": 29, "name": "Jack Robinson", "country": "AUS", "points": 1000 },
+  { "rank": 30, "name": "Alan Cleland", "country": "MEX", "points": 1000 },
+  { "rank": 31, "name": "Liam O'Brien", "country": "AUS", "points": 500 },
+  { "rank": 32, "name": "Ramzi Boukhiam", "country": "MAR", "points": 500 },
+  { "rank": 33, "name": "Callum Robson", "country": "AUS", "points": 500 },
+  { "rank": 34, "name": "Oscar Berry", "country": "AUS", "points": 500 }
 ]
