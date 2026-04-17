@@ -505,15 +505,18 @@ async function viewEvents() {
           </div>`).join('')}
       </div>`;
 
+    const hasPodium = topMen.length || topWomen.length;
+    const podiumId = `podium-${UI.esc(event.id)}`;
     return `
       <div class="card" style="margin-bottom:16px;padding:0;overflow:hidden">
         <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <span style="font-size:16px;font-weight:700">${UI.esc(event.name)}</span>
           ${typeBadge} ${statusBadge}
           ${dateStr ? `<span style="font-size:12px;color:var(--text-dim)">${dateStr}</span>` : ''}
+          ${hasPodium ? `<button data-podium-toggle="${podiumId}" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-muted);padding:0 4px;line-height:1;transition:transform .2s" title="Toggle results">⌄</button>` : ''}
         </div>
-        ${(topMen.length || topWomen.length) ? `
-        <div style="padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;gap:32px;flex-wrap:wrap">
+        ${hasPodium ? `
+        <div id="${podiumId}" style="padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;gap:32px;flex-wrap:wrap">
           ${podiumCol(topMen, '🏄 Men — Top 5')}
           ${podiumCol(topWomen, '🏄‍♀️ Women — Top 3')}
         </div>` : ''}
@@ -528,6 +531,17 @@ async function viewEvents() {
     </div>
     ${eventCards}
   `);
+
+  // Attach podium toggle handlers
+  document.querySelectorAll('[data-podium-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const podiumEl = document.getElementById(btn.dataset.podiumToggle);
+      if (!podiumEl) return;
+      const isOpen = podiumEl.style.display !== 'none';
+      podiumEl.style.display = isOpen ? 'none' : 'flex';
+      btn.style.transform = isOpen ? 'rotate(-90deg)' : '';
+    });
+  });
 
   // Attach click handlers for per-pick breakdown
   document.querySelectorAll('[data-eid][data-pid]').forEach(rowEl => {
