@@ -89,27 +89,57 @@ export const UI = {
   },
 
   breakdownTable(score) {
-    const Scoring = window._Scoring; // accessed via global set in app.js
-    const menRows = score.men.map(pick => {
-      const maxPts = pick.predictedRank === 1 ? 7 : 5;
-      const cls = Scoring.classify(pick.points, maxPts);
-      const actualLabel = pick.actualRank ? `#${pick.actualRank}` : `<span style="color:var(--text-dim)">outside</span>`;
+    const Scoring = window._Scoring;
+    const makeRows = (picks) => picks.map(pick => {
+      const cls = Scoring.classify(pick.points, pick.maxPoints);
+      const actualLabel = pick.actualRank
+        ? `#${pick.actualRank}`
+        : `<span style="color:var(--text-dim)">outside</span>`;
       return `<tr class="pick-${cls}"><td>${this.esc(pick.name || '—')}</td><td style="color:var(--text-muted)">${this.ordinal(pick.predictedRank)}</td><td>${actualLabel}</td><td class="score-${cls}">${pick.points} pt${pick.points !== 1 ? 's' : ''}</td></tr>`;
     }).join('');
-    const womenRows = score.women.map(pick => {
-      const maxPts = pick.predictedRank === 1 ? 4 : 3;
-      const cls = Scoring.classify(pick.points, maxPts);
-      const actualLabel = pick.actualRank ? `#${pick.actualRank}` : `<span style="color:var(--text-dim)">outside</span>`;
-      return `<tr class="pick-${cls}"><td>${this.esc(pick.name || '—')}</td><td style="color:var(--text-muted)">${this.ordinal(pick.predictedRank)}</td><td>${actualLabel}</td><td class="score-${cls}">${pick.points} pt${pick.points !== 1 ? 's' : ''}</td></tr>`;
-    }).join('');
+    const sectionStyle = `background:var(--surface);color:var(--text-muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:8px 14px`;
     return `<div class="breakdown"><div class="table-wrap"><table>
       <thead><tr><th>Surfer</th><th>Predicted</th><th>Actual</th><th>Points</th></tr></thead>
       <tbody>
-        <tr><td colspan="4" style="background:var(--surface);color:var(--text-muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:8px 14px">🏄 Men — Top 5</td></tr>
-        ${menRows || '<tr><td colspan="4" style="color:var(--text-dim);padding:10px 14px">No picks</td></tr>'}
-        <tr><td colspan="4" style="background:var(--surface);color:var(--text-muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:8px 14px">🏄‍♀️ Women — Top 3</td></tr>
-        ${womenRows || '<tr><td colspan="4" style="color:var(--text-dim);padding:10px 14px">No picks</td></tr>'}
+        <tr><td colspan="4" style="${sectionStyle}">🏄 Men — Top 5</td></tr>
+        ${makeRows(score.men) || '<tr><td colspan="4" style="color:var(--text-dim);padding:10px 14px">No picks</td></tr>'}
+        <tr><td colspan="4" style="${sectionStyle}">🏄‍♀️ Women — Top 3</td></tr>
+        ${makeRows(score.women) || '<tr><td colspan="4" style="color:var(--text-dim);padding:10px 14px">No picks</td></tr>'}
       </tbody></table></div></div>`;
+  },
+
+  eventBreakdownSections(eventScores) {
+    const Scoring = window._Scoring;
+    if (!eventScores || eventScores.length === 0) return '';
+    return eventScores.map(({ event, score }) => {
+      const makeRows = (picks) => picks.map(pick => {
+        const cls = Scoring.classify(pick.points, pick.maxPoints);
+        const actualLabel = pick.actualRank
+          ? `#${pick.actualRank}`
+          : `<span style="color:var(--text-dim)">outside</span>`;
+        return `<tr class="pick-${cls}"><td>${this.esc(pick.name || '—')}</td><td style="color:var(--text-muted)">${this.ordinal(pick.predictedRank)}</td><td>${actualLabel}</td><td class="score-${cls}">${pick.points} pt${pick.points !== 1 ? 's' : ''}</td></tr>`;
+      }).join('');
+      const sectionStyle = `background:var(--surface);color:var(--text-muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:8px 14px`;
+      const typeBadge = event.type === 'season'
+        ? `<span style="font-size:10px;background:var(--yellow);color:#000;padding:1px 6px;border-radius:10px;margin-left:6px">SEASON BONUS</span>`
+        : '';
+      return `
+        <div style="margin-bottom:4px">
+          <div style="padding:10px 16px;background:var(--card-bg);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:13px;font-weight:700">${this.esc(event.name)}${typeBadge}</span>
+            <span style="font-weight:800;color:var(--accent)">${score.total} pts</span>
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Surfer</th><th>Predicted</th><th>Actual</th><th>Points</th></tr></thead>
+            <tbody>
+              <tr><td colspan="4" style="${sectionStyle}">🏄 Men</td></tr>
+              ${makeRows(score.men) || '<tr><td colspan="4" style="color:var(--text-dim);padding:10px 14px">No picks</td></tr>'}
+              <tr><td colspan="4" style="${sectionStyle}">🏄‍♀️ Women</td></tr>
+              ${makeRows(score.women) || '<tr><td colspan="4" style="color:var(--text-dim);padding:10px 14px">No picks</td></tr>'}
+            </tbody>
+          </table></div>
+        </div>`;
+    }).join('');
   },
 
   startCountdown(elementId, msRemaining, onExpire) {

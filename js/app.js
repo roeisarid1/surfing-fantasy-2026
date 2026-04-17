@@ -6,17 +6,13 @@ import { Storage }      from './storage.js';
 import { Scoring }      from './scoring.js';
 import { Participants } from './participants.js';
 import { Rankings }     from './rankings.js';
+import { Events }       from './events.js';
 import { Router }       from './router.js';
 import { UI }           from './ui.js';
 import { db, collection, getDocs, onSnapshot } from './firebase.js';
 
-// Expose Scoring to UI.breakdownTable
+// Expose Scoring to UI helpers
 window._Scoring = Scoring;
-
-// Returns true once at least one surfer has points > 0
-function seasonHasStarted(menData, womenData) {
-  return [...menData, ...womenData].some(s => s.points > 0);
-}
 
 // Active Firestore real-time unsubscribe
 let _unsub = null;
@@ -33,9 +29,13 @@ function setView(html) {
    ============================================================ */
 async function viewDashboard() {
   setView(`<div class="loader"><div class="loader__spinner"></div></div>`);
-  const { men, women } = await Rankings.getBoth();
 
-  // Real-time listener on participants
+  const [{ men, women }, events] = await Promise.all([
+    Rankings.getBoth(),
+    Events.getAll()
+  ]);
+  const completedEvents = events.filter(e => e.completed);
+
   _unsub = onSnapshot(collection(db, 'participants'), async (snap) => {
     const participants = snap.docs
       .map(d => ({ id: d.id, ...d.data() }))
@@ -45,23 +45,25 @@ async function viewDashboard() {
     const predictionsMap = {};
     predSnap.forEach(d => { predictionsMap[d.id] = d.data(); });
 
-    const started     = seasonHasStarted(men.data, women.data);
-    const leaderboard = started ? Scoring.buildLeaderboard(participants, predictionsMap, men.data, women.data) : [];
-    const submitted   = participants.filter(p => predictionsMap[p.id]).length;
+    const hasEvents   = completedEvents.length > 0;
+    const leaderboard = hasEvents
+      ? Scoring.buildCumulativeLeaderboard(participants, predictionsMap, events)
+      : [];
+    const submitted = participants.filter(p => predictionsMap[p.id]).length;
 
-    const topRows = started
+    const topRows = hasEvents
       ? leaderboard.slice(0, 5).map(row => `
           <div class="dash-leader-row">
             ${UI.rankBadge(row.displayRank)}
             <span class="dash-leader-row__name">${UI.esc(row.participant.name)}</span>
             ${row.hasPredictions
-              ? `<span class="dash-leader-row__score">${row.score.total} pts</span>`
+              ? `<span class="dash-leader-row__score">${row.total} pts</span>`
               : `<span class="pill pill--gray">No picks</span>`}
           </div>`).join('')
       : `<div class="empty-state" style="padding:28px 20px">
            <div class="empty-state__icon">🌊</div>
            <div class="empty-state__title">Season hasn't started yet</div>
-           <div class="empty-state__desc">Scores will appear once the first event rankings are updated.</div>
+           <div class="empty-state__desc">Scores will appear once the first event results are entered.</div>
          </div>`;
 
     document.getElementById('app').innerHTML = `
@@ -80,22 +82,19 @@ async function viewDashboard() {
           <div class="stat-card__label">Picks Submitted</div>
         </div>
         <div class="stat-card">
-          <div class="stat-card__value">${men.data.length > 0 ? men.data[0].name.split(' ').pop() : '—'}</div>
-          <div class="stat-card__label">Men's Leader</div>
+          <div class="stat-card__value">${completedEvents.length}</div>
+          <div class="stat-card__label">Events Done</div>
         </div>
         <div class="stat-card">
-          <div class="stat-card__value">${women.data.length > 0 ? women.data[0].name.split(' ').pop() : '—'}</div>
-          <div class="stat-card__label">Women's Leader</div>
+          <div class="stat-card__value">${events.length}</div>
+          <div class="stat-card__label">Total Events</div>
         </div>
       </div>
 
       <div class="card" style="margin-bottom:20px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
           <h2 style="font-size:17px;font-weight:700">Fantasy Leaderboard</h2>
-          <div style="display:flex;align-items:center;gap:8px">
-            ${UI.sourceBadge(men.source)}
-            <a href="#/leaderboard" class="btn btn-secondary btn-sm">View</a>
-          </div>
+          <a href="#/leaderboard" class="btn btn-secondary btn-sm">View</a>
         </div>
         ${participants.length === 0
           ? `<div class="empty-state">
@@ -105,7 +104,7 @@ async function viewDashboard() {
               <a href="#/participants" class="btn btn-primary">Add Participants</a>
              </div>`
           : `<div>${topRows}</div>
-             ${started && leaderboard.length > 5
+             ${hasEvents && leaderboard.length > 5
                ? `<div style="text-align:center;margin-top:12px">
                     <a href="#/leaderboard" class="btn btn-secondary btn-sm">View full leaderboard →</a>
                   </div>` : ''}`}
@@ -198,7 +197,6 @@ function viewParticipants() {
         : `<div id="participantList">${rows}</div>`}
     `;
 
-    // Add
     const doAdd = async () => {
       const input = document.getElementById('newName');
       const name  = input?.value.trim();
@@ -210,7 +208,6 @@ function viewParticipants() {
     document.getElementById('btnAdd')?.addEventListener('click', doAdd);
     document.getElementById('newName')?.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-    // Rename
     document.querySelectorAll('.btn-rename').forEach(btn => {
       btn.addEventListener('click', () => {
         const id   = btn.dataset.id;
@@ -239,7 +236,6 @@ function viewParticipants() {
       });
     });
 
-    // Delete
     document.querySelectorAll('.btn-delete').forEach(btn => {
       btn.addEventListener('click', () => {
         UI.confirm('Delete participant', `Remove "${btn.dataset.name}" and all their picks?`, async () => {
@@ -405,9 +401,141 @@ async function viewStandings() {
       </div>
     </div>
     <p style="margin-top:16px;font-size:12px;color:var(--text-dim);text-align:right">
-      Fantasy scoring uses Top 5 (men) and Top 3 (women) from these standings.
+      World rankings are informational. Fantasy scores are based on per-event results.
     </p>
   `);
+}
+
+/* ============================================================
+   VIEW: EVENTS
+   ============================================================ */
+async function viewEvents() {
+  setView(`<div class="loader"><div class="loader__spinner"></div></div>`);
+
+  const [events, participantsSnap, predSnap] = await Promise.all([
+    Events.getAll(),
+    getDocs(collection(db, 'participants')),
+    getDocs(collection(db, 'predictions'))
+  ]);
+
+  const participants = participantsSnap.docs
+    .map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+  const predictionsMap = {};
+  predSnap.forEach(d => { predictionsMap[d.id] = d.data(); });
+
+  if (events.length === 0) {
+    setView(`
+      <div class="page-header"><h1>Events</h1><p>Season competition results</p></div>
+      <div class="empty-state">
+        <div class="empty-state__icon">🏆</div>
+        <div class="empty-state__title">No events yet</div>
+        <div class="empty-state__desc">Add events via the Admin page once competitions are completed.</div>
+        <a href="#/admin" class="btn btn-primary">Go to Admin</a>
+      </div>`);
+    return;
+  }
+
+  const completedCount = events.filter(e => e.completed).length;
+
+  const eventCards = events.map(event => {
+    const typeBadge = event.type === 'season'
+      ? `<span class="pill" style="background:var(--yellow);color:#000;font-size:11px">Season Bonus</span>`
+      : `<span class="pill pill--gray" style="font-size:11px">Competition</span>`;
+    const statusBadge = event.completed
+      ? `<span class="pill pill--green" style="font-size:11px">✅ Completed</span>`
+      : `<span class="pill pill--gray" style="font-size:11px">⏳ Upcoming</span>`;
+    const dateStr = event.date
+      ? new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      : '';
+
+    if (!event.completed) {
+      return `
+        <div class="card" style="margin-bottom:16px;opacity:.6">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="font-size:16px;font-weight:700">${UI.esc(event.name)}</span>
+            ${typeBadge} ${statusBadge}
+            ${dateStr ? `<span style="font-size:12px;color:var(--text-dim)">${dateStr}</span>` : ''}
+          </div>
+        </div>`;
+    }
+
+    // Build per-participant scores for this event
+    const eventRows = participants.map(p => {
+      const pred  = predictionsMap[p.id] || null;
+      const score = Scoring.scoreParticipantForEvent(pred, event);
+      return { participant: p, score, hasPredictions: !!pred };
+    });
+    eventRows.sort((a, b) => b.score.total - a.score.total);
+
+    let displayRank = 1;
+    eventRows.forEach((row, i) => {
+      if (i > 0 && eventRows[i].score.total < eventRows[i - 1].score.total) displayRank = i + 1;
+      row.displayRank = displayRank;
+    });
+
+    const scoreRows = eventRows.map(row => `
+      <div class="leaderboard-row" data-eid="${UI.esc(event.id)}" data-pid="${UI.esc(row.participant.id)}" style="cursor:pointer">
+        <div class="leaderboard-row__rank">${UI.rankBadge(row.displayRank)}</div>
+        <div class="leaderboard-row__name">${UI.esc(row.participant.name)}</div>
+        ${row.hasPredictions
+          ? `<div style="font-size:12px;color:var(--text-muted)">
+               <span>⚡ Men: ${row.score.men.reduce((s,p)=>s+p.points,0)}</span>&nbsp;
+               <span>⚡ Women: ${row.score.women.reduce((s,p)=>s+p.points,0)}</span>
+             </div>`
+          : `<span class="pill pill--gray">No picks</span>`}
+        <div class="leaderboard-row__score">${row.hasPredictions ? row.score.total : '—'}</div>
+        <div class="leaderboard-row__pts-label">pts</div>
+        ${row.hasPredictions ? `<div class="leaderboard-row__chevron">›</div>` : ''}
+      </div>
+      <div id="ebd-${UI.esc(event.id)}-${UI.esc(row.participant.id)}" style="display:none"></div>
+    `).join('');
+
+    return `
+      <div class="card" style="margin-bottom:16px;padding:0;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-size:16px;font-weight:700">${UI.esc(event.name)}</span>
+          ${typeBadge} ${statusBadge}
+          ${dateStr ? `<span style="font-size:12px;color:var(--text-dim)">${dateStr}</span>` : ''}
+        </div>
+        <div>${scoreRows}</div>
+      </div>`;
+  }).join('');
+
+  setView(`
+    <div class="page-header">
+      <h1>Events</h1>
+      <p>Season competition results · ${completedCount} of ${events.length} completed</p>
+    </div>
+    ${eventCards}
+  `);
+
+  // Attach click handlers for per-pick breakdown
+  document.querySelectorAll('[data-eid][data-pid]').forEach(rowEl => {
+    rowEl.addEventListener('click', () => {
+      const eid = rowEl.dataset.eid;
+      const pid = rowEl.dataset.pid;
+      const bdEl = document.getElementById(`ebd-${eid}-${pid}`);
+      if (!bdEl) return;
+      const isOpen = rowEl.classList.contains('open');
+      // Close all in this event card
+      rowEl.closest('.card').querySelectorAll('.leaderboard-row.open').forEach(r => {
+        r.classList.remove('open');
+        const key = `ebd-${r.dataset.eid}-${r.dataset.pid}`;
+        const el = document.getElementById(key);
+        if (el) el.style.display = 'none';
+      });
+      if (!isOpen) {
+        rowEl.classList.add('open');
+        bdEl.style.display = 'block';
+        const event   = events.find(e => e.id === eid);
+        const pred    = predictionsMap[pid];
+        const score   = Scoring.scoreParticipantForEvent(pred, event);
+        bdEl.innerHTML = UI.breakdownTable(score);
+      }
+    });
+  });
 }
 
 /* ============================================================
@@ -415,8 +543,9 @@ async function viewStandings() {
    ============================================================ */
 async function viewLeaderboard() {
   setView(`<div class="loader"><div class="loader__spinner"></div></div>`);
-  const { men, women } = await Rankings.getBoth();
-  const maxScore = 7 + 5 + 5 + 5 + 5 + 4 + 3 + 3;
+
+  const events = await Events.getAll();
+  const completedEvents = events.filter(e => e.completed);
 
   _unsub = onSnapshot(collection(db, 'participants'), async (snap) => {
     const participants = snap.docs
@@ -427,20 +556,19 @@ async function viewLeaderboard() {
     const predictionsMap = {};
     predSnap.forEach(d => { predictionsMap[d.id] = d.data(); });
 
-    const started     = seasonHasStarted(men.data, women.data);
-    const leaderboard = started ? Scoring.buildLeaderboard(participants, predictionsMap, men.data, women.data) : [];
-
-    if (!started) {
+    if (completedEvents.length === 0) {
       document.getElementById('app').innerHTML = `
         <div class="page-header"><h1>Fantasy Leaderboard</h1></div>
         <div class="empty-state">
           <div class="empty-state__icon">🌊</div>
           <div class="empty-state__title">Season hasn't started yet</div>
-          <div class="empty-state__desc">Scores will appear once the first event rankings are updated.</div>
-          <a href="#/participants" class="btn btn-primary">View Participants</a>
+          <div class="empty-state__desc">Scores will appear once the first event results are entered.</div>
+          <a href="#/events" class="btn btn-primary">View Events</a>
         </div>`;
       return;
     }
+
+    const leaderboard = Scoring.buildCumulativeLeaderboard(participants, predictionsMap, events);
 
     if (leaderboard.length === 0) {
       document.getElementById('app').innerHTML = `
@@ -455,22 +583,17 @@ async function viewLeaderboard() {
     }
 
     const rows = leaderboard.map(row => {
-      const p   = row.participant;
-      const pct = maxScore > 0 ? Math.round((row.score.total / maxScore) * 100) : 0;
+      const p = row.participant;
       return `
         <div class="leaderboard-row" id="lbrow-${UI.esc(p.id)}" data-id="${UI.esc(p.id)}">
           <div class="leaderboard-row__rank">${UI.rankBadge(row.displayRank)}</div>
           <div class="leaderboard-row__name">${UI.esc(p.name)} ${row.displayRank === 1 && row.hasPredictions ? '👑' : ''}</div>
           ${row.hasPredictions
-            ? `<div>
-                <div style="font-size:11px;color:var(--text-dim);margin-bottom:3px">${pct}% of max</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted)">
-                  <span>⚡ Men: ${row.score.men.reduce((s,p)=>s+p.points,0)}</span>
-                  <span>⚡ Women: ${row.score.women.reduce((s,p)=>s+p.points,0)}</span>
-                </div>
+            ? `<div style="font-size:12px;color:var(--text-muted)">
+                 ${completedEvents.length} event${completedEvents.length !== 1 ? 's' : ''} scored
                </div>`
             : `<span class="pill pill--gray">No picks</span>`}
-          <div class="leaderboard-row__score">${row.hasPredictions ? row.score.total : '—'}</div>
+          <div class="leaderboard-row__score">${row.hasPredictions ? row.total : '—'}</div>
           <div class="leaderboard-row__pts-label">pts</div>
           ${row.hasPredictions ? `<div class="leaderboard-row__chevron">›</div>` : ''}
         </div>
@@ -478,13 +601,13 @@ async function viewLeaderboard() {
     }).join('');
 
     document.getElementById('app').innerHTML = `
-      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
-        <div><h1>Fantasy Leaderboard</h1><p>Combined score from Men Top 5 + Women Top 3 predictions</p></div>
-        ${UI.sourceBadge(men.source)}
+      <div class="page-header">
+        <h1>Fantasy Leaderboard</h1>
+        <p>Cumulative score across ${completedEvents.length} completed event${completedEvents.length !== 1 ? 's' : ''}</p>
       </div>
       <div>${rows}</div>
       <p style="margin-top:16px;font-size:12px;color:var(--text-dim)">
-        Max possible score: ${maxScore} pts &nbsp;·&nbsp; Click a participant to see pick breakdown
+        Click a participant to see per-event breakdown
       </p>`;
 
     document.querySelectorAll('.leaderboard-row').forEach(rowEl => {
@@ -502,7 +625,9 @@ async function viewLeaderboard() {
           rowEl.classList.add('open');
           breakdown.style.display = 'block';
           const lbRow = leaderboard.find(r => r.participant.id === pid);
-          if (lbRow?.hasPredictions) breakdown.innerHTML = UI.breakdownTable(lbRow.score);
+          if (lbRow?.hasPredictions) {
+            breakdown.innerHTML = `<div class="breakdown">${UI.eventBreakdownSections(lbRow.eventScores)}</div>`;
+          }
         }
       });
     });
@@ -552,16 +677,52 @@ async function viewAdmin() {
     return;
   }
 
-  const [menOverride, womenOverride] = await Promise.all([
+  const [menOverride, womenOverride, events] = await Promise.all([
     Rankings.getOverride('men'),
-    Rankings.getOverride('women')
+    Rankings.getOverride('women'),
+    Events.getAll()
   ]);
 
   const fmtDate = iso => iso ? new Date(iso).toLocaleString() : 'never';
 
-  setView(`
-    <div class="page-header"><h1>Admin</h1><p>Manage rankings data and league settings.</p></div>
+  const eventCards = events.length === 0
+    ? `<p style="font-size:13px;color:var(--text-dim)">No events yet. Add one below.</p>`
+    : events.map(ev => {
+        const statusBadge = ev.completed
+          ? `<span class="pill pill--green" style="font-size:11px">✅ Completed</span>`
+          : `<span class="pill pill--gray" style="font-size:11px">⏳ Upcoming</span>`;
+        const typeBadge = ev.type === 'season'
+          ? `<span class="pill" style="background:var(--yellow);color:#000;font-size:11px">Season Bonus</span>`
+          : `<span class="pill pill--gray" style="font-size:11px">Competition</span>`;
+        return `
+          <div class="card" style="margin-bottom:12px;padding:14px 16px" id="evcard-${UI.esc(ev.id)}">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="font-weight:700">${UI.esc(ev.name)}</span>
+              ${typeBadge} ${statusBadge}
+              <span style="font-size:12px;color:var(--text-dim)">#${ev.order || 0} · ${ev.date || ''}</span>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-secondary btn-sm btn-ev-edit" data-id="${UI.esc(ev.id)}">✏️ Edit</button>
+              <button class="btn btn-danger btn-sm btn-ev-delete" data-id="${UI.esc(ev.id)}" data-name="${UI.esc(ev.name)}">✕ Delete</button>
+            </div>
+            <div id="evform-${UI.esc(ev.id)}" style="display:none;margin-top:14px"></div>
+          </div>`;
+      }).join('');
 
+  setView(`
+    <div class="page-header"><h1>Admin</h1><p>Manage events, rankings data and league settings.</p></div>
+
+    <!-- EVENTS -->
+    <div class="card" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <h2 style="font-size:16px;font-weight:700">Events</h2>
+        <button class="btn btn-primary btn-sm" id="btnAddEvent">+ Add Event</button>
+      </div>
+      <div id="newEventForm" style="display:none;margin-bottom:16px;padding:16px;background:var(--surface);border-radius:8px;border:1px solid var(--border)"></div>
+      <div id="eventList">${eventCards}</div>
+    </div>
+
+    <!-- WORLD RANKINGS OVERRIDES -->
     <div class="card" style="margin-bottom:20px">
       <h2 style="font-size:16px;font-weight:700;margin-bottom:6px">Override Men Rankings</h2>
       <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">
@@ -595,6 +756,124 @@ async function viewAdmin() {
     </div>
   `);
 
+  // --- Event form builder ---
+  function buildEventForm(existing) {
+    const ev = existing || { name: '', date: '', order: events.length + 1, type: 'competition', completed: false, men: [], women: [] };
+    return `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="form-group">
+          <label style="font-size:12px;color:var(--text-muted)">Event Name</label>
+          <input type="text" id="efName" value="${UI.esc(ev.name)}" placeholder="e.g. Bells Beach Pro" maxlength="80" />
+        </div>
+        <div class="form-group">
+          <label style="font-size:12px;color:var(--text-muted)">Date</label>
+          <input type="date" id="efDate" value="${UI.esc(ev.date || '')}" />
+        </div>
+        <div class="form-group">
+          <label style="font-size:12px;color:var(--text-muted)">Order #</label>
+          <input type="number" id="efOrder" value="${ev.order || 1}" min="1" />
+        </div>
+        <div class="form-group">
+          <label style="font-size:12px;color:var(--text-muted)">Type</label>
+          <select id="efType">
+            <option value="competition" ${ev.type === 'competition' ? 'selected' : ''}>Competition</option>
+            <option value="season" ${ev.type === 'season' ? 'selected' : ''}>Season Bonus</option>
+          </select>
+        </div>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:12px;cursor:pointer">
+        <input type="checkbox" id="efCompleted" ${ev.completed ? 'checked' : ''} />
+        Completed (results locked in)
+      </label>
+      <div class="form-group" style="margin-bottom:10px">
+        <label style="font-size:12px;color:var(--text-muted)">Men's Results (JSON) — <code>[{"rank":1,"name":"…","country":"BRA"}, …]</code></label>
+        <textarea class="admin-textarea" id="efMen" style="min-height:100px">${ev.men && ev.men.length ? JSON.stringify(ev.men, null, 2) : ''}</textarea>
+      </div>
+      <div class="form-group" style="margin-bottom:12px">
+        <label style="font-size:12px;color:var(--text-muted)">Women's Results (JSON)</label>
+        <textarea class="admin-textarea" id="efWomen" style="min-height:80px">${ev.women && ev.women.length ? JSON.stringify(ev.women, null, 2) : ''}</textarea>
+      </div>`;
+  }
+
+  function readEventForm() {
+    const name      = document.getElementById('efName')?.value.trim();
+    const date      = document.getElementById('efDate')?.value.trim();
+    const order     = parseInt(document.getElementById('efOrder')?.value) || 1;
+    const type      = document.getElementById('efType')?.value || 'competition';
+    const completed = document.getElementById('efCompleted')?.checked || false;
+    let men = [], women = [];
+    try { men   = JSON.parse(document.getElementById('efMen')?.value.trim()  || '[]'); } catch(e) { throw new Error('Men JSON: ' + e.message); }
+    try { women = JSON.parse(document.getElementById('efWomen')?.value.trim() || '[]'); } catch(e) { throw new Error('Women JSON: ' + e.message); }
+    if (!name) throw new Error('Event name is required');
+    return { name, date, order, type, completed, men, women };
+  }
+
+  function slugify(name) {
+    return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now();
+  }
+
+  // Add new event
+  document.getElementById('btnAddEvent')?.addEventListener('click', () => {
+    const form = document.getElementById('newEventForm');
+    if (form.style.display !== 'none') { form.style.display = 'none'; return; }
+    form.innerHTML = buildEventForm(null) + `
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm" id="btnSaveNewEvent">💾 Save Event</button>
+        <button class="btn btn-secondary btn-sm" id="btnCancelNewEvent">Cancel</button>
+      </div>`;
+    form.style.display = 'block';
+
+    document.getElementById('btnCancelNewEvent')?.addEventListener('click', () => { form.style.display = 'none'; });
+    document.getElementById('btnSaveNewEvent')?.addEventListener('click', async () => {
+      try {
+        const data = readEventForm();
+        const id   = slugify(data.name);
+        await Events.save(id, data);
+        UI.toast('✅ Event saved');
+        viewAdmin();
+      } catch(e) { UI.toast('❌ ' + e.message); }
+    });
+  });
+
+  // Edit existing event
+  document.querySelectorAll('.btn-ev-edit').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id    = btn.dataset.id;
+      const ev    = events.find(e => e.id === id);
+      const formEl = document.getElementById('evform-' + id);
+      if (!formEl) return;
+      if (formEl.style.display !== 'none') { formEl.style.display = 'none'; return; }
+      formEl.innerHTML = buildEventForm(ev) + `
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm" id="btnSaveEv-${UI.esc(id)}">💾 Save</button>
+          <button class="btn btn-secondary btn-sm" id="btnCancelEv-${UI.esc(id)}">Cancel</button>
+        </div>`;
+      formEl.style.display = 'block';
+
+      document.getElementById('btnCancelEv-' + id)?.addEventListener('click', () => { formEl.style.display = 'none'; });
+      document.getElementById('btnSaveEv-' + id)?.addEventListener('click', async () => {
+        try {
+          const data = readEventForm();
+          await Events.save(id, data);
+          UI.toast('✅ Event updated');
+          viewAdmin();
+        } catch(e) { UI.toast('❌ ' + e.message); }
+      });
+    });
+  });
+
+  // Delete event
+  document.querySelectorAll('.btn-ev-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      UI.confirm('Delete event', `Remove "${btn.dataset.name}"?`, async () => {
+        await Events.remove(btn.dataset.id);
+        UI.toast('Event deleted');
+        viewAdmin();
+      });
+    });
+  });
+
+  // World rankings overrides
   document.getElementById('btnSaveMen')?.addEventListener('click', async () => {
     try {
       const data = JSON.parse(document.getElementById('menOverrideInput').value.trim());
@@ -628,9 +907,9 @@ async function viewAdmin() {
   });
 
   document.getElementById('btnWipeAll')?.addEventListener('click', () => {
-    UI.confirm('Wipe all data', 'Delete ALL Firestore participants, predictions and overrides?', async () => {
+    UI.confirm('Wipe all data', 'Delete ALL Firestore participants, predictions, overrides and events?', async () => {
       const { deleteDoc, doc } = await import('./firebase.js');
-      for (const cname of ['participants','predictions','overrides']) {
+      for (const cname of ['participants','predictions','overrides','events']) {
         const snap = await getDocs(collection(db, cname));
         await Promise.all(snap.docs.map(d => deleteDoc(doc(db, cname, d.id))));
       }
@@ -648,6 +927,7 @@ UI.initNavBurger();
 Router
   .on('/',                 ()       => viewDashboard())
   .on('/standings',        ()       => viewStandings())
+  .on('/events',           ()       => viewEvents())
   .on('/leaderboard',      ()       => viewLeaderboard())
   .on('/participants',     ()       => viewParticipants())
   .on('/predictions/:id',  (params) => viewPredictions(params.id))
