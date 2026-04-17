@@ -3,27 +3,31 @@
    ============================================================ */
 export const Scoring = {
 
-  EVENT_SCORE_MEN:    [5, 4, 3, 2, 1],
-  EVENT_SCORE_WOMEN:  [5, 4, 3],
-  SEASON_SCORE_MEN:   [20, 13, 8, 5, 3],
-  SEASON_SCORE_WOMEN: [10, 7, 5],
+  // Per-event: index = abs diff between predicted and actual rank
+  EVENT_MEN_SCORES:    [5, 3, 2, 1, 1],   // diff 0,1,2,3,4+
+  EVENT_WOMEN_SCORES:  [3, 1, 1],          // diff 0,1,2+
 
-  _scorePick(predictedRank, surferName, results, scores) {
+  // Season bonus: same logic, higher stakes
+  SEASON_MEN_SCORES:   [20, 13, 8, 5, 3], // diff 0,1,2,3,4+
+  SEASON_WOMEN_SCORES: [10, 7, 5],         // diff 0,1,2+
+
+  _scorePick(predictedRank, surferName, results, topN, scores) {
     if (!surferName) return { points: 0, actualRank: null };
     const actual = results.find(
       s => s.name.trim().toLowerCase() === surferName.trim().toLowerCase()
     );
     const actualRank = actual ? actual.rank : null;
-    if (!actualRank || actualRank > scores.length) return { points: 0, actualRank };
-    const points = (actualRank === predictedRank) ? (scores[actualRank - 1] || 0) : 0;
+    if (!actualRank || actualRank > topN) return { points: 0, actualRank };
+    const diff   = Math.abs(predictedRank - actualRank);
+    const points = scores[Math.min(diff, scores.length - 1)] || 0;
     return { points, actualRank };
   },
 
   scoreParticipantForEvent(predictions, eventData) {
     if (!predictions || !eventData) return { total: 0, men: [], women: [] };
     const isSeason    = eventData.type === 'season';
-    const menScores   = isSeason ? this.SEASON_SCORE_MEN   : this.EVENT_SCORE_MEN;
-    const womenScores = isSeason ? this.SEASON_SCORE_WOMEN : this.EVENT_SCORE_WOMEN;
+    const menScores   = isSeason ? this.SEASON_MEN_SCORES   : this.EVENT_MEN_SCORES;
+    const womenScores = isSeason ? this.SEASON_WOMEN_SCORES : this.EVENT_WOMEN_SCORES;
 
     let total = 0;
     const men   = [];
@@ -31,16 +35,16 @@ export const Scoring = {
 
     (predictions.men || []).forEach((name, i) => {
       const predictedRank = i + 1;
-      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.men || [], menScores);
+      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.men || [], 5, menScores);
       total += points;
-      men.push({ predictedRank, name, points, actualRank, maxPoints: menScores[i] || 0 });
+      men.push({ predictedRank, name, points, actualRank, maxPoints: menScores[0] });
     });
 
     (predictions.women || []).forEach((name, i) => {
       const predictedRank = i + 1;
-      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.women || [], womenScores);
+      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.women || [], 3, womenScores);
       total += points;
-      women.push({ predictedRank, name, points, actualRank, maxPoints: womenScores[i] || 0 });
+      women.push({ predictedRank, name, points, actualRank, maxPoints: womenScores[0] });
     });
 
     return { total, men, women };
