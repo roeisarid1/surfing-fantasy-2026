@@ -506,21 +506,23 @@ async function viewEvents() {
       </div>`;
 
     const hasPodium = topMen.length || topWomen.length;
-    const podiumId = `podium-${UI.esc(event.id)}`;
+    const bodyId = `body-${UI.esc(event.id)}`;
     return `
       <div class="card" style="margin-bottom:16px;padding:0;overflow:hidden">
-        <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;cursor:pointer" data-body-toggle="${bodyId}">
           <span style="font-size:16px;font-weight:700">${UI.esc(event.name)}</span>
           ${typeBadge} ${statusBadge}
           ${dateStr ? `<span style="font-size:12px;color:var(--text-dim)">${dateStr}</span>` : ''}
-          ${hasPodium ? `<button data-podium-toggle="${podiumId}" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-muted);padding:0 4px;line-height:1;transition:transform .2s" title="Toggle results">⌄</button>` : ''}
+          <span data-chevron="${bodyId}" style="margin-left:auto;font-size:18px;color:var(--text-muted);line-height:1;transition:transform .2s;display:inline-block">⌄</span>
         </div>
-        ${hasPodium ? `
-        <div id="${podiumId}" style="padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;gap:32px;flex-wrap:wrap">
-          ${podiumCol(topMen, '🏄 Men — Top 5')}
-          ${podiumCol(topWomen, '🏄‍♀️ Women — Top 3')}
-        </div>` : ''}
-        <div>${scoreRows}</div>
+        <div id="${bodyId}">
+          ${hasPodium ? `
+          <div style="padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;gap:32px;flex-wrap:wrap">
+            ${podiumCol(topMen, '🏄 Men — Top 5')}
+            ${podiumCol(topWomen, '🏄‍♀️ Women — Top 3')}
+          </div>` : ''}
+          <div>${scoreRows}</div>
+        </div>
       </div>`;
   }).join('');
 
@@ -532,14 +534,15 @@ async function viewEvents() {
     ${eventCards}
   `);
 
-  // Attach podium toggle handlers
-  document.querySelectorAll('[data-podium-toggle]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const podiumEl = document.getElementById(btn.dataset.podiumToggle);
-      if (!podiumEl) return;
-      const isOpen = podiumEl.style.display !== 'none';
-      podiumEl.style.display = isOpen ? 'none' : 'flex';
-      btn.style.transform = isOpen ? 'rotate(-90deg)' : '';
+  // Attach event body toggle handlers
+  document.querySelectorAll('[data-body-toggle]').forEach(header => {
+    header.addEventListener('click', () => {
+      const bodyEl = document.getElementById(header.dataset.bodyToggle);
+      const chevron = document.querySelector(`[data-chevron="${header.dataset.bodyToggle}"]`);
+      if (!bodyEl) return;
+      const isOpen = bodyEl.style.display !== 'none';
+      bodyEl.style.display = isOpen ? 'none' : '';
+      if (chevron) chevron.style.transform = isOpen ? 'rotate(-90deg)' : '';
     });
   });
 
