@@ -11,13 +11,15 @@ export const Scoring = {
   SEASON_MEN_SCORES:   [20, 13, 8, 5, 3], // diff 0,1,2,3,4+
   SEASON_WOMEN_SCORES: [10, 7, 5],         // diff 0,1,2+
 
-  _scorePick(predictedRank, surferName, results, topN, scores) {
+  _scorePick(predictedRank, surferName, results, topN, scores, firstPlaceBonus) {
     if (!surferName) return { points: 0, actualRank: null };
     const actual = results.find(
       s => s.name.trim().toLowerCase() === surferName.trim().toLowerCase()
     );
     const actualRank = actual ? actual.rank : null;
     if (!actualRank || actualRank > topN) return { points: 0, actualRank };
+    // Bonus for nailing 1st place exactly
+    if (predictedRank === 1 && actualRank === 1) return { points: firstPlaceBonus, actualRank };
     const diff   = Math.abs(predictedRank - actualRank);
     const points = scores[Math.min(diff, scores.length - 1)] || 0;
     return { points, actualRank };
@@ -33,18 +35,21 @@ export const Scoring = {
     const men   = [];
     const women = [];
 
+    const men1stBonus   = isSeason ? 30 : 7;
+    const women1stBonus = isSeason ? 30 : 7;
+
     (predictions.men || []).forEach((name, i) => {
       const predictedRank = i + 1;
-      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.men || [], 5, menScores);
+      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.men || [], 5, menScores, men1stBonus);
       total += points;
-      men.push({ predictedRank, name, points, actualRank, maxPoints: menScores[0] });
+      men.push({ predictedRank, name, points, actualRank, maxPoints: men1stBonus });
     });
 
     (predictions.women || []).forEach((name, i) => {
       const predictedRank = i + 1;
-      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.women || [], 3, womenScores);
+      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.women || [], 3, womenScores, women1stBonus);
       total += points;
-      women.push({ predictedRank, name, points, actualRank, maxPoints: womenScores[0] });
+      women.push({ predictedRank, name, points, actualRank, maxPoints: women1stBonus });
     });
 
     return { total, men, women };
