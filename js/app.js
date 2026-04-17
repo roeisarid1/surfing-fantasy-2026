@@ -495,14 +495,14 @@ async function viewEvents() {
     const topMen = (event.men || []).filter(s => s.rank <= 5).sort((a,b) => a.rank - b.rank);
     const topWomen = (event.women || []).filter(s => s.rank <= 3).sort((a,b) => a.rank - b.rank);
 
-    const podiumRow = (surfers, label) => surfers.length === 0 ? '' : `
-      <div style="padding:10px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;min-width:48px">${label}</span>
+    const podiumCol = (surfers, label) => surfers.length === 0 ? '' : `
+      <div style="flex:1;min-width:160px">
+        <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">${label}</div>
         ${surfers.map(s => `
-          <span style="display:flex;align-items:center;gap:4px;font-size:13px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px">
             ${UI.rankBadge(s.rank)}
-            ${UI.flag(s.country)} ${UI.esc(s.name)}
-          </span>`).join('')}
+            <span>${UI.flag(s.country)} ${UI.esc(s.name)}</span>
+          </div>`).join('')}
       </div>`;
 
     return `
@@ -512,8 +512,11 @@ async function viewEvents() {
           ${typeBadge} ${statusBadge}
           ${dateStr ? `<span style="font-size:12px;color:var(--text-dim)">${dateStr}</span>` : ''}
         </div>
-        ${podiumRow(topMen, '🏄 Men')}
-        ${podiumRow(topWomen, '🏄‍♀️ Women')}
+        ${(topMen.length || topWomen.length) ? `
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;gap:32px;flex-wrap:wrap">
+          ${podiumCol(topMen, '🏄 Men — Top 5')}
+          ${podiumCol(topWomen, '🏄‍♀️ Women — Top 3')}
+        </div>` : ''}
         <div>${scoreRows}</div>
       </div>`;
   }).join('');
