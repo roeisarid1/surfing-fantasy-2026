@@ -492,6 +492,19 @@ async function viewEvents() {
       <div id="ebd-${UI.esc(event.id)}-${UI.esc(row.participant.id)}" style="display:none"></div>
     `).join('');
 
+    const topMen = (event.men || []).filter(s => s.rank <= 5).sort((a,b) => a.rank - b.rank);
+    const topWomen = (event.women || []).filter(s => s.rank <= 3).sort((a,b) => a.rank - b.rank);
+
+    const podiumRow = (surfers, label) => surfers.length === 0 ? '' : `
+      <div style="padding:10px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;min-width:48px">${label}</span>
+        ${surfers.map(s => `
+          <span style="display:flex;align-items:center;gap:4px;font-size:13px">
+            ${UI.rankBadge(s.rank)}
+            ${UI.flag(s.country)} ${UI.esc(s.name)}
+          </span>`).join('')}
+      </div>`;
+
     return `
       <div class="card" style="margin-bottom:16px;padding:0;overflow:hidden">
         <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -499,6 +512,8 @@ async function viewEvents() {
           ${typeBadge} ${statusBadge}
           ${dateStr ? `<span style="font-size:12px;color:var(--text-dim)">${dateStr}</span>` : ''}
         </div>
+        ${podiumRow(topMen, '🏄 Men')}
+        ${podiumRow(topWomen, '🏄‍♀️ Women')}
         <div>${scoreRows}</div>
       </div>`;
   }).join('');
