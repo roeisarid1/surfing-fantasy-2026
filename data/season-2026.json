@@ -1,0 +1,141 @@
+[
+  {
+    "id": "bells-beach-2026",
+    "name": "Rip Curl Pro Bells Beach",
+    "date": "2026-04-01",
+    "order": 1,
+    "type": "competition",
+    "completed": true,
+    "men": [
+      { "rank": 1, "name": "Miguel Pupo",          "country": "BRA" },
+      { "rank": 2, "name": "Yago Dora",             "country": "BRA" },
+      { "rank": 3, "name": "Griffin Colapinto",     "country": "USA" },
+      { "rank": 3, "name": "Gabriel Medina",        "country": "BRA" },
+      { "rank": 5, "name": "Barron Mamiya",         "country": "HAW" },
+      { "rank": 5, "name": "Kanoa Igarashi",        "country": "JPN" },
+      { "rank": 5, "name": "Leonardo Fioravanti",   "country": "ITA" },
+      { "rank": 5, "name": "Samuel Pupo",           "country": "BRA" }
+    ],
+    "women": []
+  },
+  {
+    "id": "margaret-river-2026",
+    "name": "Western Australia Margaret River Pro",
+    "date": "2026-04-16",
+    "order": 2,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "gold-coast-2026",
+    "name": "Bonsoy Gold Coast Pro",
+    "date": "2026-05-01",
+    "order": 3,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "new-zealand-2026",
+    "name": "Corona Cero New Zealand Pro",
+    "date": "2026-05-15",
+    "order": 4,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "el-salvador-2026",
+    "name": "Surf City El Salvador Pro",
+    "date": "2026-06-05",
+    "order": 5,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "rio-pro-2026",
+    "name": "VIVO Rio Pro",
+    "date": "2026-06-19",
+    "order": 6,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "tahiti-pro-2026",
+    "name": "Tahiti Pro",
+    "date": "2026-08-08",
+    "order": 8,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "fiji-pro-2026",
+    "name": "Fiji Pro",
+    "date": "2026-08-25",
+    "order": 9,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "trestles-pro-2026",
+    "name": "Lexus Trestles Pro",
+    "date": "2026-09-11",
+    "order": 10,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "surf-abu-dhabi-2026",
+    "name": "Surf Abu Dhabi",
+    "date": "2026-10-14",
+    "order": 11,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "portugal-pro-2026",
+    "name": "MEO Rip Curl Pro Portugal",
+    "date": "2026-10-22",
+    "order": 12,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "pipe-masters-2026",
+    "name": "Lexus Pipe Masters",
+    "date": "2026-12-08",
+    "order": 13,
+    "type": "competition",
+    "completed": false,
+    "men": [],
+    "women": []
+  },
+  {
+    "id": "world-rankings-bonus",
+    "name": "Season Bonus — WSL World Rankings",
+    "date": "2026-12-21",
+    "order": 14,
+    "type": "season",
+    "completed": false,
+    "men": [],
+    "women": []
+  }
+]
