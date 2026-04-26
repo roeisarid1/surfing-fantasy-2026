@@ -726,11 +726,23 @@ function viewRules() {
 
       <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:16px;margin-bottom:24px">
         <div style="font-weight:700;margin-bottom:6px">⚠️ WSL Tie Rule (Per-Event Only)</div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px">In WSL competitions there is no official 4th place — both semifinal losers share 3rd, and all quarterfinalists share 5th. To keep scoring fair:</p>
-        <ul style="font-size:13px;color:var(--text-muted);padding-left:18px;margin:0;line-height:1.8">
-          <li><strong>Men:</strong> Predicted <strong>4th</strong> + surfer finishes <strong>3rd</strong> → counts as exact (5 pts). Finishing 5th is scored normally (off by 1, 3 pts)</li>
-          <li><strong>Women:</strong> Predicted <strong>3rd</strong> + surfer finishes <strong>4th</strong> → counts as exact (3 pts)</li>
-        </ul>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">WSL doesn't have unique rankings — surfers share positions: both semifinal losers are <strong>tied 3rd</strong> (stored as 3 & 4), and all 4 quarterfinalist losers are <strong>tied 5th</strong> (stored as 5–8). The normal diff-based scoring would unfairly penalize picks within the same tier, so these bridge rules apply:</p>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px">
+          <thead><tr style="background:var(--surface)">
+            <th style="text-align:left;padding:6px 8px;font-weight:700">Predicted</th>
+            <th style="text-align:left;padding:6px 8px;font-weight:700">Actual</th>
+            <th style="text-align:left;padding:6px 8px;font-weight:700">Reason</th>
+            <th style="text-align:right;padding:6px 8px;font-weight:700">Points</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">3rd</td><td style="padding:6px 8px">4th</td><td style="padding:6px 8px;color:var(--text-muted)">both semi-losers</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5 pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">4th</td><td style="padding:6px 8px">3rd</td><td style="padding:6px 8px;color:var(--text-muted)">both semi-losers</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5 pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">4th</td><td style="padding:6px 8px">5th</td><td style="padding:6px 8px;color:var(--text-muted)">predicted semi, finished QF — a real miss</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">3 pts (off by 1)</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">5th</td><td style="padding:6px 8px">6th / 7th / 8th</td><td style="padding:6px 8px;color:var(--text-muted)">all QF-losers</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5 pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">Women 3rd</td><td style="padding:6px 8px">4th</td><td style="padding:6px 8px;color:var(--text-muted)">both semi-losers</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">3 pts</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:12px;color:var(--text-dim);margin:0">These rules do <strong>not</strong> apply to the End of Season Bonus.</p>
       </div>
 
       <div style="background:var(--surface);border-radius:10px;padding:20px;border:1px solid var(--border)">
