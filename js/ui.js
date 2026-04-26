@@ -123,21 +123,27 @@ export const UI = {
       const typeBadge = event.type === 'season'
         ? `<span style="font-size:10px;background:var(--yellow);color:#000;padding:1px 6px;border-radius:10px;margin-left:6px">SEASON BONUS</span>`
         : '';
+      const tableId = `evtable-${this.esc(event.id)}`;
       return `
         <div style="margin-bottom:4px">
-          <div style="padding:10px 16px;background:var(--card-bg);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+          <div data-ev-toggle="${tableId}" style="padding:10px 16px;background:var(--card-bg);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;cursor:pointer">
             <span style="font-size:13px;font-weight:700">${this.esc(event.name)}${typeBadge}</span>
-            <span style="font-weight:800;color:var(--accent)">${score.total} pts</span>
+            <span style="display:flex;align-items:center;gap:10px">
+              <span style="font-weight:800;color:var(--accent)">${score.total} pts</span>
+              <span data-ev-chevron="${tableId}" style="font-size:16px;color:var(--text-muted);transition:transform .2s;display:inline-block;transform:rotate(-90deg)">⌄</span>
+            </span>
           </div>
-          <div class="table-wrap"><table>
-            <thead><tr><th>Surfer</th><th>Predicted</th><th>Actual</th><th>Points</th></tr></thead>
-            <tbody>
-              <tr><td colspan="4" style="${sectionStyle}">🏄 Men</td></tr>
-              ${makeRows(score.men) || '<tr><td colspan="4" style="color:var(--text-dim);padding:10px 14px">No picks</td></tr>'}
-              <tr><td colspan="4" style="${sectionStyle}">🏄‍♀️ Women</td></tr>
-              ${makeRows(score.women) || '<tr><td colspan="4" style="color:var(--text-dim);padding:10px 14px">No picks</td></tr>'}
-            </tbody>
-          </table></div>
+          <div id="${tableId}" style="display:none">
+            <div class="table-wrap"><table>
+              <thead><tr><th>Surfer</th><th>Predicted</th><th>Actual</th><th>Points</th></tr></thead>
+              <tbody>
+                <tr><td colspan="4" style="${sectionStyle}">🏄 Men</td></tr>
+                ${makeRows(score.men) || '<tr><td colspan="4" style="color:var(--text-dim);padding:10px 14px">No picks</td></tr>'}
+                <tr><td colspan="4" style="${sectionStyle}">🏄‍♀️ Women</td></tr>
+                ${makeRows(score.women) || '<tr><td colspan="4" style="color:var(--text-dim);padding:10px 14px">No picks</td></tr>'}
+              </tbody>
+            </table></div>
+          </div>
         </div>`;
     }).join('');
   },

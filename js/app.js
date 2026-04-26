@@ -662,6 +662,16 @@ async function viewLeaderboard() {
           const lbRow = leaderboard.find(r => r.participant.id === pid);
           if (lbRow?.hasPredictions) {
             breakdown.innerHTML = `<div class="breakdown">${UI.eventBreakdownSections(lbRow.eventScores)}</div>`;
+            breakdown.querySelectorAll('[data-ev-toggle]').forEach(hdr => {
+              hdr.addEventListener('click', () => {
+                const tableEl  = document.getElementById(hdr.dataset.evToggle);
+                const chevron  = breakdown.querySelector(`[data-ev-chevron="${hdr.dataset.evToggle}"]`);
+                if (!tableEl) return;
+                const isOpen = tableEl.style.display !== 'none';
+                tableEl.style.display = isOpen ? 'none' : '';
+                if (chevron) chevron.style.transform = isOpen ? 'rotate(-90deg)' : '';
+              });
+            });
           }
         }
       });
