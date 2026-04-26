@@ -18,17 +18,30 @@ export const Scoring = {
     );
     const actualRank = actual ? actual.rank : null;
 
-    // WSL bridge rule (per-event only):
-    // Semi-final losers are truly "tied 3rd" but stored as ranks 3 & 4.
-    // QF losers are truly "tied 5th" but stored as ranks 5–8.
-    // Men (topN=5):  predicted 4 + actual 3 or 5 → exact 2nd–5th (5 pts).
-    // Women (topN=3): predicted 3 + actual 4 → exact match (3 pts).
+    // WSL bridge rules (per-event only):
+    // Semi-losers stored as ranks 3 & 4 (both truly tied 3rd).
+    // QF-losers stored as ranks 5–8 (all truly tied 5th).
     if (!isSeason && actualRank) {
-      if (topN === 5 && predictedRank === 4 && (actualRank === 3 || actualRank === 5)) {
-        return { points: scores[0], actualRank };
+      if (topN === 5) {
+        // ranks 3 & 4 are the same tier — symmetrical exact match
+        if ((predictedRank === 3 && actualRank === 4) ||
+            (predictedRank === 4 && actualRank === 3)) {
+          return { points: scores[0], actualRank };
+        }
+        // predicted 4 bridges into QF-loser tier
+        if (predictedRank === 4 && actualRank === 5) {
+          return { points: scores[0], actualRank };
+        }
+        // ranks 5–8 are the same tier — predicted 5 matches any QF-loser
+        if (predictedRank === 5 && actualRank >= 6 && actualRank <= 8) {
+          return { points: scores[0], actualRank };
+        }
       }
-      if (topN === 3 && predictedRank === 3 && actualRank === 4) {
-        return { points: scores[0], actualRank };
+      if (topN === 3) {
+        // ranks 3 & 4 are both semi-losers for women
+        if (predictedRank === 3 && actualRank === 4) {
+          return { points: scores[0], actualRank };
+        }
       }
     }
 
