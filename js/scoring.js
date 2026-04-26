@@ -33,6 +33,17 @@ export const Scoring = {
     [20,  8,  0],  // predicted 3rd
   ],
 
+  // Converts a raw WSL result rank into the scoring tier used for diff calculation.
+  // Men:   1→1, 2→2, 3-4→3, 5-8→5, 9+→null (outside)
+  // Women: 1→1, 2→2, 3-4→3, 5+→null (outside)
+  _wslTier(actualRank, topN) {
+    if (actualRank === 1) return 1;
+    if (actualRank === 2) return 2;
+    if (actualRank === 3 || actualRank === 4) return 3;
+    if (topN === 5 && actualRank >= 5 && actualRank <= 8) return 5;
+    return null;
+  },
+
   _scorePick(predictedRank, surferName, results, topN, scoreMatrix, isSeason) {
     const rowScores = scoreMatrix[predictedRank - 1];
     const maxPoints = rowScores[0];
@@ -42,28 +53,17 @@ export const Scoring = {
       s => s.name.trim().toLowerCase() === surferName.trim().toLowerCase()
     );
     const actualRank = actual ? actual.rank : null;
+    if (!actualRank) return { points: 0, actualRank, maxPoints };
 
-    // WSL bridge rules (per-event only):
-    // Semi-losers stored as ranks 3 & 4 (both truly tied 3rd).
-    // QF-losers stored as ranks 5–8 (all truly tied 5th).
-    // Points come from the predicted slot, not a fixed value.
-    if (!isSeason && actualRank) {
-      if (topN === 5) {
-        if ((predictedRank === 3 && actualRank === 4) ||
-            (predictedRank === 4 && actualRank === 3)) {
-          return { points: rowScores[0], actualRank, maxPoints };
-        }
-        if (predictedRank === 5 && actualRank >= 6 && actualRank <= 8) {
-          return { points: rowScores[0], actualRank, maxPoints };
-        }
-      }
-      if (topN === 3 && predictedRank === 3 && actualRank === 4) {
-        return { points: rowScores[0], actualRank, maxPoints };
-      }
-    }
+    // For per-event: normalize actual rank to WSL scoring tier before computing diff.
+    // For season bonus: use raw rank with a simple topN cut-off (rankings are unique).
+    const scoringRank = isSeason
+      ? (actualRank <= topN ? actualRank : null)
+      : this._wslTier(actualRank, topN);
 
-    if (!actualRank || actualRank > topN) return { points: 0, actualRank, maxPoints };
-    const diff   = Math.abs(predictedRank - actualRank);
+    if (!scoringRank) return { points: 0, actualRank, maxPoints };
+
+    const diff   = Math.abs(predictedRank - scoringRank);
     const points = rowScores[Math.min(diff, rowScores.length - 1)] || 0;
     return { points, actualRank, maxPoints };
   },
