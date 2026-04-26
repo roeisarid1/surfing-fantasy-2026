@@ -683,6 +683,13 @@ async function viewLeaderboard() {
    VIEW: RULES
    ============================================================ */
 function viewRules() {
+  const tdL = `style="padding:6px 0;border-bottom:1px solid var(--border)"`;
+  const tdR = `style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)"`;
+  const tdLl = `style="padding:6px 0"`;
+  const tdRl = `style="text-align:right;font-weight:700;color:var(--text-dim);padding:6px 0"`;
+  const tdRlg = `style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0"`;
+  const h3 = `style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px"`;
+
   setView(`
     <div class="page-header">
       <h1>Rules</h1>
@@ -697,58 +704,59 @@ function viewRules() {
 
       <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px">
         <div style="flex:1;min-width:240px">
-          <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px">🏄 Men — Per Event</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:13px">
-            <tbody>
-              <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">🎯 Exact 1st place</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">7 pts</td></tr>
-              <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">✅ Exact 2nd–5th</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">5 pts</td></tr>
-              <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">Off by 1 position</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">3 pts</td></tr>
-              <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">Off by 2</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">2 pts</td></tr>
-              <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">Off by 3+ (still top 5)</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">1 pt</td></tr>
-              <tr><td style="padding:6px 0">Outside top 5</td><td style="text-align:right;font-weight:700;color:var(--text-dim);padding:6px 0">0 pts</td></tr>
-            </tbody>
-          </table>
+          <h3 ${h3}>🏄 Men — Per Event</h3>
+          <table style="width:100%;border-collapse:collapse;font-size:13px"><tbody>
+            <tr><td ${tdL}>🎯 Exact 1st place</td><td ${tdR}>7 pts</td></tr>
+            <tr><td ${tdL}>✅ Exact 2nd–5th</td><td ${tdR}>5 pts</td></tr>
+            <tr><td ${tdL}>Off by 1 position</td><td ${tdR}>3 pts</td></tr>
+            <tr><td ${tdL}>Off by 2</td><td ${tdR}>2 pts</td></tr>
+            <tr><td ${tdL}>Off by 3+ (still top 5)</td><td ${tdR}>1 pt</td></tr>
+            <tr><td ${tdLl}>Outside top 5</td><td ${tdRl}>0 pts</td></tr>
+          </tbody></table>
         </div>
         <div style="flex:1;min-width:240px">
-          <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px">🏄‍♀️ Women — Per Event</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:13px">
-            <tbody>
-              <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">🎯 Exact match</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">3 pts</td></tr>
-              <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">Off by 1 or in top 3</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">1 pt</td></tr>
-              <tr><td style="padding:6px 0">Outside top 3</td><td style="text-align:right;font-weight:700;color:var(--text-dim);padding:6px 0">0 pts</td></tr>
-            </tbody>
-          </table>
+          <h3 ${h3}>🏄‍♀️ Women — Per Event</h3>
+          <table style="width:100%;border-collapse:collapse;font-size:13px"><tbody>
+            <tr><td ${tdL}>🎯 Exact match</td><td ${tdR}>3 pts</td></tr>
+            <tr><td ${tdL}>Off by 1 or in top 3</td><td ${tdR}>1 pt</td></tr>
+            <tr><td ${tdLl}>Outside top 3</td><td ${tdRl}>0 pts</td></tr>
+          </tbody></table>
         </div>
+      </div>
+
+      <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:16px;margin-bottom:24px">
+        <div style="font-weight:700;margin-bottom:6px">⚠️ WSL Tie Rule (Per-Event Only)</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px">In WSL competitions there is no official 4th place — both semifinal losers share 3rd, and all quarterfinalists share 5th. To keep scoring fair:</p>
+        <ul style="font-size:13px;color:var(--text-muted);padding-left:18px;margin:0;line-height:1.8">
+          <li><strong>Men:</strong> Predicted <strong>4th</strong> + surfer finishes <strong>3rd or 5th</strong> → counts as exact (5 pts)</li>
+          <li><strong>Women:</strong> Predicted <strong>3rd</strong> + surfer finishes <strong>4th</strong> → counts as exact (3 pts)</li>
+        </ul>
       </div>
 
       <div style="background:var(--surface);border-radius:10px;padding:20px;border:1px solid var(--border)">
         <h2 style="font-size:15px;font-weight:700;margin-bottom:4px">🏆 End of Season Bonus — After Pipeline</h2>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Once the season is over, the final WSL world rankings count as one last mega-event. Same logic, much higher stakes.</p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Once the season is over, the final WSL world rankings count as one last mega-event. Same logic, much higher stakes. Tie rule does <strong>not</strong> apply here.</p>
         <div style="display:flex;gap:24px;flex-wrap:wrap">
           <div style="flex:1;min-width:240px">
-            <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px">🏄 Men's Final Rankings</h3>
-            <table style="width:100%;border-collapse:collapse;font-size:13px">
-              <tbody>
-                <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">🎯 Exact 1st place</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">30 pts</td></tr>
-                <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">✅ Exact 2nd–5th</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">20 pts</td></tr>
-                <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">Off by 1</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">13 pts</td></tr>
-                <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">Off by 2</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">8 pts</td></tr>
-                <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">Off by 3</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">5 pts</td></tr>
-                <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">Off by 4</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">3 pts</td></tr>
-                <tr><td style="padding:6px 0">Outside top 5</td><td style="text-align:right;font-weight:700;color:var(--text-dim);padding:6px 0">0 pts</td></tr>
-              </tbody>
-            </table>
+            <h3 ${h3}>🏄 Men's Final Rankings</h3>
+            <table style="width:100%;border-collapse:collapse;font-size:13px"><tbody>
+              <tr><td ${tdL}>🎯 Exact 1st place</td><td ${tdR}>30 pts</td></tr>
+              <tr><td ${tdL}>✅ Exact 2nd–5th</td><td ${tdR}>20 pts</td></tr>
+              <tr><td ${tdL}>Off by 1</td><td ${tdR}>13 pts</td></tr>
+              <tr><td ${tdL}>Off by 2</td><td ${tdR}>8 pts</td></tr>
+              <tr><td ${tdL}>Off by 3</td><td ${tdR}>5 pts</td></tr>
+              <tr><td ${tdL}>Off by 4</td><td ${tdR}>3 pts</td></tr>
+              <tr><td ${tdLl}>Outside top 5</td><td ${tdRl}>0 pts</td></tr>
+            </tbody></table>
           </div>
           <div style="flex:1;min-width:240px">
-            <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px">🏄‍♀️ Women's Final Rankings</h3>
-            <table style="width:100%;border-collapse:collapse;font-size:13px">
-              <tbody>
-                <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">🎯 Exact 1st</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">30 pts</td></tr>
-                <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">✅ Exact 2nd</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">10 pts</td></tr>
-                <tr><td style="padding:6px 0;border-bottom:1px solid var(--border)">Exact 3rd or off by 1</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0;border-bottom:1px solid var(--border)">7 pts</td></tr>
-                <tr><td style="padding:6px 0">Off by 2</td><td style="text-align:right;font-weight:700;color:var(--accent);padding:6px 0">5 pts</td></tr>
-              </tbody>
-            </table>
+            <h3 ${h3}>🏄‍♀️ Women's Final Rankings</h3>
+            <table style="width:100%;border-collapse:collapse;font-size:13px"><tbody>
+              <tr><td ${tdL}>🎯 Exact 1st</td><td ${tdR}>30 pts</td></tr>
+              <tr><td ${tdL}>✅ Exact 2nd</td><td ${tdR}>10 pts</td></tr>
+              <tr><td ${tdL}>Exact 3rd or off by 1</td><td ${tdR}>7 pts</td></tr>
+              <tr><td ${tdLl}>Off by 2</td><td ${tdRlg}>5 pts</td></tr>
+            </tbody></table>
           </div>
         </div>
       </div>
