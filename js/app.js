@@ -728,7 +728,7 @@ function viewRules() {
         <div style="font-weight:700;margin-bottom:6px">⚠️ WSL Tie Rule (Per-Event Only)</div>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px">In WSL competitions there is no official 4th place — both semifinal losers share 3rd, and all quarterfinalists share 5th. To keep scoring fair:</p>
         <ul style="font-size:13px;color:var(--text-muted);padding-left:18px;margin:0;line-height:1.8">
-          <li><strong>Men:</strong> Predicted <strong>4th</strong> + surfer finishes <strong>3rd or 5th</strong> → counts as exact (5 pts)</li>
+          <li><strong>Men:</strong> Predicted <strong>4th</strong> + surfer finishes <strong>3rd</strong> → counts as exact (5 pts). Finishing 5th is scored normally (off by 1, 3 pts)</li>
           <li><strong>Women:</strong> Predicted <strong>3rd</strong> + surfer finishes <strong>4th</strong> → counts as exact (3 pts)</li>
         </ul>
       </div>

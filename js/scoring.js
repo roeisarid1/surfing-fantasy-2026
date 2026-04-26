@@ -28,10 +28,6 @@ export const Scoring = {
             (predictedRank === 4 && actualRank === 3)) {
           return { points: scores[0], actualRank };
         }
-        // predicted 4 bridges into QF-loser tier
-        if (predictedRank === 4 && actualRank === 5) {
-          return { points: scores[0], actualRank };
-        }
         // ranks 5–8 are the same tier — predicted 5 matches any QF-loser
         if (predictedRank === 5 && actualRank >= 6 && actualRank <= 8) {
           return { points: scores[0], actualRank };
