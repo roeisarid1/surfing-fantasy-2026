@@ -664,8 +664,8 @@ async function viewLeaderboard() {
             breakdown.innerHTML = `<div class="breakdown">${UI.eventBreakdownSections(lbRow.eventScores)}</div>`;
             breakdown.querySelectorAll('[data-ev-toggle]').forEach(hdr => {
               hdr.addEventListener('click', () => {
-                const tableEl  = document.getElementById(hdr.dataset.evToggle);
-                const chevron  = breakdown.querySelector(`[data-ev-chevron="${hdr.dataset.evToggle}"]`);
+                const tableEl = hdr.nextElementSibling;
+                const chevron = hdr.querySelector('[data-ev-chevron]');
                 if (!tableEl) return;
                 const isOpen = tableEl.style.display !== 'none';
                 tableEl.style.display = isOpen ? 'none' : '';
