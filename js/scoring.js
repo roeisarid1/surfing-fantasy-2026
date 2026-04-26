@@ -11,12 +11,27 @@ export const Scoring = {
   SEASON_MEN_SCORES:   [20, 13, 8, 5, 3], // diff 0,1,2,3,4+
   SEASON_WOMEN_SCORES: [10, 7, 5],         // diff 0,1,2+
 
-  _scorePick(predictedRank, surferName, results, topN, scores, firstPlaceBonus) {
+  _scorePick(predictedRank, surferName, results, topN, scores, firstPlaceBonus, isSeason) {
     if (!surferName) return { points: 0, actualRank: null };
     const actual = results.find(
       s => s.name.trim().toLowerCase() === surferName.trim().toLowerCase()
     );
     const actualRank = actual ? actual.rank : null;
+
+    // WSL bridge rule (per-event only):
+    // Semi-final losers are truly "tied 3rd" but stored as ranks 3 & 4.
+    // QF losers are truly "tied 5th" but stored as ranks 5–8.
+    // Men (topN=5):  predicted 4 + actual 3 or 5 → exact 2nd–5th (5 pts).
+    // Women (topN=3): predicted 3 + actual 4 → exact match (3 pts).
+    if (!isSeason && actualRank) {
+      if (topN === 5 && predictedRank === 4 && (actualRank === 3 || actualRank === 5)) {
+        return { points: scores[0], actualRank };
+      }
+      if (topN === 3 && predictedRank === 3 && actualRank === 4) {
+        return { points: scores[0], actualRank };
+      }
+    }
+
     if (!actualRank || actualRank > topN) return { points: 0, actualRank };
     // Bonus for nailing 1st place exactly
     if (predictedRank === 1 && actualRank === 1) return { points: firstPlaceBonus, actualRank };
@@ -40,14 +55,14 @@ export const Scoring = {
 
     (predictions.men || []).forEach((name, i) => {
       const predictedRank = i + 1;
-      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.men || [], 5, menScores, men1stBonus);
+      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.men || [], 5, menScores, men1stBonus, isSeason);
       total += points;
       men.push({ predictedRank, name, points, actualRank, maxPoints: men1stBonus });
     });
 
     (predictions.women || []).forEach((name, i) => {
       const predictedRank = i + 1;
-      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.women || [], 3, womenScores, women1stBonus);
+      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.women || [], 3, womenScores, women1stBonus, isSeason);
       total += points;
       women.push({ predictedRank, name, points, actualRank, maxPoints: women1stBonus });
     });
