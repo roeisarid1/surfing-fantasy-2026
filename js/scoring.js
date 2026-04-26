@@ -3,16 +3,41 @@
    ============================================================ */
 export const Scoring = {
 
-  // Per-event: index = abs diff between predicted and actual rank
-  EVENT_MEN_SCORES:    [5, 3, 2, 1, 1],   // diff 0,1,2,3,4+
-  EVENT_WOMEN_SCORES:  [3, 1, 1],          // diff 0,1,2+
+  // Per-event scores: matrix[predictedRank-1][diff]  diff = 0 (exact), 1, 2, 3+
+  EVENT_MEN_SCORES: [
+    [10, 7, 5, 2],  // predicted 1st
+    [ 8, 5, 3, 1],  // predicted 2nd
+    [ 7, 4, 2, 1],  // predicted 3rd
+    [ 6, 3, 1, 0],  // predicted 4th
+    [ 5, 2, 1, 0],  // predicted 5th
+  ],
 
-  // Season bonus: same logic, higher stakes
-  SEASON_MEN_SCORES:   [20, 13, 8, 5, 3], // diff 0,1,2,3,4+
-  SEASON_WOMEN_SCORES: [10, 7, 5],         // diff 0,1,2+
+  EVENT_WOMEN_SCORES: [
+    [8, 5, 3],  // predicted 1st
+    [6, 3, 1],  // predicted 2nd
+    [5, 2, 0],  // predicted 3rd
+  ],
 
-  _scorePick(predictedRank, surferName, results, topN, scores, firstPlaceBonus, isSeason) {
-    if (!surferName) return { points: 0, actualRank: null };
+  // Season bonus: same decay ratios as per-event, higher exact values
+  SEASON_MEN_SCORES: [
+    [40, 28, 20, 8],  // predicted 1st
+    [32, 20, 12, 4],  // predicted 2nd
+    [28, 16,  8, 4],  // predicted 3rd
+    [24, 12,  4, 0],  // predicted 4th
+    [20,  8,  4, 0],  // predicted 5th
+  ],
+
+  SEASON_WOMEN_SCORES: [
+    [32, 20, 12],  // predicted 1st
+    [24, 12,  4],  // predicted 2nd
+    [20,  8,  0],  // predicted 3rd
+  ],
+
+  _scorePick(predictedRank, surferName, results, topN, scoreMatrix, isSeason) {
+    const rowScores = scoreMatrix[predictedRank - 1];
+    const maxPoints = rowScores[0];
+    if (!surferName) return { points: 0, actualRank: null, maxPoints };
+
     const actual = results.find(
       s => s.name.trim().toLowerCase() === surferName.trim().toLowerCase()
     );
@@ -21,59 +46,50 @@ export const Scoring = {
     // WSL bridge rules (per-event only):
     // Semi-losers stored as ranks 3 & 4 (both truly tied 3rd).
     // QF-losers stored as ranks 5–8 (all truly tied 5th).
+    // Points come from the predicted slot, not a fixed value.
     if (!isSeason && actualRank) {
       if (topN === 5) {
-        // ranks 3 & 4 are the same tier — symmetrical exact match
         if ((predictedRank === 3 && actualRank === 4) ||
             (predictedRank === 4 && actualRank === 3)) {
-          return { points: scores[0], actualRank };
+          return { points: rowScores[0], actualRank, maxPoints };
         }
-        // ranks 5–8 are the same tier — predicted 5 matches any QF-loser
         if (predictedRank === 5 && actualRank >= 6 && actualRank <= 8) {
-          return { points: scores[0], actualRank };
+          return { points: rowScores[0], actualRank, maxPoints };
         }
       }
-      if (topN === 3) {
-        // ranks 3 & 4 are both semi-losers for women
-        if (predictedRank === 3 && actualRank === 4) {
-          return { points: scores[0], actualRank };
-        }
+      if (topN === 3 && predictedRank === 3 && actualRank === 4) {
+        return { points: rowScores[0], actualRank, maxPoints };
       }
     }
 
-    if (!actualRank || actualRank > topN) return { points: 0, actualRank };
-    // Bonus for nailing 1st place exactly
-    if (predictedRank === 1 && actualRank === 1) return { points: firstPlaceBonus, actualRank };
+    if (!actualRank || actualRank > topN) return { points: 0, actualRank, maxPoints };
     const diff   = Math.abs(predictedRank - actualRank);
-    const points = scores[Math.min(diff, scores.length - 1)] || 0;
-    return { points, actualRank };
+    const points = rowScores[Math.min(diff, rowScores.length - 1)] || 0;
+    return { points, actualRank, maxPoints };
   },
 
   scoreParticipantForEvent(predictions, eventData) {
     if (!predictions || !eventData) return { total: 0, men: [], women: [] };
     const isSeason    = eventData.type === 'season';
-    const menScores   = isSeason ? this.SEASON_MEN_SCORES   : this.EVENT_MEN_SCORES;
-    const womenScores = isSeason ? this.SEASON_WOMEN_SCORES : this.EVENT_WOMEN_SCORES;
+    const menMatrix   = isSeason ? this.SEASON_MEN_SCORES   : this.EVENT_MEN_SCORES;
+    const womenMatrix = isSeason ? this.SEASON_WOMEN_SCORES : this.EVENT_WOMEN_SCORES;
 
     let total = 0;
     const men   = [];
     const women = [];
 
-    const men1stBonus   = isSeason ? 30 : 7;
-    const women1stBonus = isSeason ? 30 : 7;
-
     (predictions.men || []).forEach((name, i) => {
       const predictedRank = i + 1;
-      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.men || [], 5, menScores, men1stBonus, isSeason);
+      const { points, actualRank, maxPoints } = this._scorePick(predictedRank, name, eventData.men || [], 5, menMatrix, isSeason);
       total += points;
-      men.push({ predictedRank, name, points, actualRank, maxPoints: men1stBonus });
+      men.push({ predictedRank, name, points, actualRank, maxPoints });
     });
 
     (predictions.women || []).forEach((name, i) => {
       const predictedRank = i + 1;
-      const { points, actualRank } = this._scorePick(predictedRank, name, eventData.women || [], 3, womenScores, women1stBonus, isSeason);
+      const { points, actualRank, maxPoints } = this._scorePick(predictedRank, name, eventData.women || [], 3, womenMatrix, isSeason);
       total += points;
-      women.push({ predictedRank, name, points, actualRank, maxPoints: women1stBonus });
+      women.push({ predictedRank, name, points, actualRank, maxPoints });
     });
 
     return { total, men, women };

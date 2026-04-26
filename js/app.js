@@ -700,27 +700,44 @@ function viewRules() {
       <p style="margin-bottom:16px">Instead of scoring once at the end of the season, we now score <strong>every competition separately</strong> and accumulate points throughout the year!</p>
 
       <h2 style="font-size:15px;font-weight:700;margin-bottom:8px">How it works</h2>
-      <p style="color:var(--text-muted);margin-bottom:24px">Your <strong>5 men's picks + 3 women's picks</strong> are measured against each event's results — the same picks, all season long.</p>
+      <p style="color:var(--text-muted);margin-bottom:4px">Your <strong>5 men's picks + 3 women's picks</strong> are measured against each event's results — the same picks, all season long.</p>
+      <p style="color:var(--text-muted);margin-bottom:20px;font-size:13px">Scoring has two factors: <strong>how important the predicted position was</strong> (higher picks are worth more) and <strong>how close the prediction was</strong> (partial points for near misses).</p>
 
       <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px">
-        <div style="flex:1;min-width:240px">
+        <div style="flex:1;min-width:260px">
           <h3 ${h3}>🏄 Men — Per Event</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:13px"><tbody>
-            <tr><td ${tdL}>🎯 Exact 1st place</td><td ${tdR}>7 pts</td></tr>
-            <tr><td ${tdL}>✅ Exact 2nd–5th</td><td ${tdR}>5 pts</td></tr>
-            <tr><td ${tdL}>Off by 1 position</td><td ${tdR}>3 pts</td></tr>
-            <tr><td ${tdL}>Off by 2</td><td ${tdR}>2 pts</td></tr>
-            <tr><td ${tdL}>Off by 3+ (still top 5)</td><td ${tdR}>1 pt</td></tr>
-            <tr><td ${tdLl}>Outside top 5</td><td ${tdRl}>0 pts</td></tr>
-          </tbody></table>
+          <table style="width:100%;border-collapse:collapse;font-size:13px">
+            <thead><tr style="background:var(--surface)">
+              <th style="text-align:left;padding:6px 8px;font-weight:700">Predicted</th>
+              <th style="text-align:right;padding:6px 8px;font-weight:700">Exact</th>
+              <th style="text-align:right;padding:6px 8px;font-weight:700">Off by 1</th>
+              <th style="text-align:right;padding:6px 8px;font-weight:700">Off by 2</th>
+              <th style="text-align:right;padding:6px 8px;font-weight:700">Off by 3+</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">🎯 1st</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">10</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">7</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">5</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">2</td></tr>
+              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">2nd</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">8</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">5</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">3</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td></tr>
+              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">3rd</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">7</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">4</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">2</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td></tr>
+              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">4th</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">6</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">3</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td><td style="text-align:right;padding:6px 8px;color:var(--text-dim)">0</td></tr>
+              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">5th</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">2</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td><td style="text-align:right;padding:6px 8px;color:var(--text-dim)">0</td></tr>
+            </tbody>
+          </table>
         </div>
         <div style="flex:1;min-width:240px">
           <h3 ${h3}>🏄‍♀️ Women — Per Event</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:13px"><tbody>
-            <tr><td ${tdL}>🎯 Exact match</td><td ${tdR}>3 pts</td></tr>
-            <tr><td ${tdL}>Off by 1 or in top 3</td><td ${tdR}>1 pt</td></tr>
-            <tr><td ${tdLl}>Outside top 3</td><td ${tdRl}>0 pts</td></tr>
-          </tbody></table>
+          <table style="width:100%;border-collapse:collapse;font-size:13px">
+            <thead><tr style="background:var(--surface)">
+              <th style="text-align:left;padding:6px 8px;font-weight:700">Predicted</th>
+              <th style="text-align:right;padding:6px 8px;font-weight:700">Exact</th>
+              <th style="text-align:right;padding:6px 8px;font-weight:700">Off by 1</th>
+              <th style="text-align:right;padding:6px 8px;font-weight:700">Off by 2</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">🎯 1st</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">8</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">5</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">3</td></tr>
+              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">2nd</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">6</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">3</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td></tr>
+              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">3rd</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">2</td><td style="text-align:right;padding:6px 8px;color:var(--text-dim)">0</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -735,11 +752,11 @@ function viewRules() {
             <th style="text-align:right;padding:6px 8px;font-weight:700">Points</th>
           </tr></thead>
           <tbody>
-            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">3rd</td><td style="padding:6px 8px">4th</td><td style="padding:6px 8px;color:var(--text-muted)">both semi-losers</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5 pts</td></tr>
-            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">4th</td><td style="padding:6px 8px">3rd</td><td style="padding:6px 8px;color:var(--text-muted)">both semi-losers</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5 pts</td></tr>
-            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">4th</td><td style="padding:6px 8px">5th</td><td style="padding:6px 8px;color:var(--text-muted)">predicted semi, finished QF — a real miss</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">3 pts (off by 1)</td></tr>
-            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">5th</td><td style="padding:6px 8px">6th / 7th / 8th</td><td style="padding:6px 8px;color:var(--text-muted)">all QF-losers</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5 pts</td></tr>
-            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">Women 3rd</td><td style="padding:6px 8px">4th</td><td style="padding:6px 8px;color:var(--text-muted)">both semi-losers</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">3 pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">Men 3rd</td><td style="padding:6px 8px">4th</td><td style="padding:6px 8px;color:var(--text-muted)">both semi-losers → exact for 3rd slot</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">7 pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">Men 4th</td><td style="padding:6px 8px">3rd</td><td style="padding:6px 8px;color:var(--text-muted)">both semi-losers → exact for 4th slot</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">6 pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">Men 4th</td><td style="padding:6px 8px">5th</td><td style="padding:6px 8px;color:var(--text-muted)">predicted semi, finished QF — a real miss</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">3 pts (off by 1)</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">Men 5th</td><td style="padding:6px 8px">6th / 7th / 8th</td><td style="padding:6px 8px;color:var(--text-muted)">all QF-losers → exact for 5th slot</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5 pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">Women 3rd</td><td style="padding:6px 8px">4th</td><td style="padding:6px 8px;color:var(--text-muted)">both semi-losers → exact for 3rd slot</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5 pts</td></tr>
           </tbody>
         </table>
         <p style="font-size:12px;color:var(--text-dim);margin:0">These rules do <strong>not</strong> apply to the End of Season Bonus.</p>
@@ -747,28 +764,42 @@ function viewRules() {
 
       <div style="background:var(--surface);border-radius:10px;padding:20px;border:1px solid var(--border)">
         <h2 style="font-size:15px;font-weight:700;margin-bottom:4px">🏆 End of Season Bonus — After Pipeline</h2>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Once the season is over, the final WSL world rankings count as one last mega-event. Same logic, much higher stakes. Tie rule does <strong>not</strong> apply here.</p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">The final WSL world rankings count as one last mega-event. Same position-weighted logic, much higher stakes. Tie rule does <strong>not</strong> apply here.</p>
         <div style="display:flex;gap:24px;flex-wrap:wrap">
-          <div style="flex:1;min-width:240px">
+          <div style="flex:1;min-width:260px">
             <h3 ${h3}>🏄 Men's Final Rankings</h3>
-            <table style="width:100%;border-collapse:collapse;font-size:13px"><tbody>
-              <tr><td ${tdL}>🎯 Exact 1st place</td><td ${tdR}>30 pts</td></tr>
-              <tr><td ${tdL}>✅ Exact 2nd–5th</td><td ${tdR}>20 pts</td></tr>
-              <tr><td ${tdL}>Off by 1</td><td ${tdR}>13 pts</td></tr>
-              <tr><td ${tdL}>Off by 2</td><td ${tdR}>8 pts</td></tr>
-              <tr><td ${tdL}>Off by 3</td><td ${tdR}>5 pts</td></tr>
-              <tr><td ${tdL}>Off by 4</td><td ${tdR}>3 pts</td></tr>
-              <tr><td ${tdLl}>Outside top 5</td><td ${tdRl}>0 pts</td></tr>
-            </tbody></table>
+            <table style="width:100%;border-collapse:collapse;font-size:13px">
+              <thead><tr style="background:var(--card-bg)">
+                <th style="text-align:left;padding:6px 8px;font-weight:700">Predicted</th>
+                <th style="text-align:right;padding:6px 8px;font-weight:700">Exact</th>
+                <th style="text-align:right;padding:6px 8px;font-weight:700">Off 1</th>
+                <th style="text-align:right;padding:6px 8px;font-weight:700">Off 2</th>
+                <th style="text-align:right;padding:6px 8px;font-weight:700">Off 3+</th>
+              </tr></thead>
+              <tbody>
+                <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">🎯 1st</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">40</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">28</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">20</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">8</td></tr>
+                <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">2nd</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">32</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">20</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">12</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">4</td></tr>
+                <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">3rd</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">28</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">16</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">8</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">4</td></tr>
+                <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">4th</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">24</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">12</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">4</td><td style="text-align:right;padding:6px 8px;color:var(--text-dim)">0</td></tr>
+                <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">5th</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">20</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">8</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">4</td><td style="text-align:right;padding:6px 8px;color:var(--text-dim)">0</td></tr>
+              </tbody>
+            </table>
           </div>
-          <div style="flex:1;min-width:240px">
+          <div style="flex:1;min-width:220px">
             <h3 ${h3}>🏄‍♀️ Women's Final Rankings</h3>
-            <table style="width:100%;border-collapse:collapse;font-size:13px"><tbody>
-              <tr><td ${tdL}>🎯 Exact 1st</td><td ${tdR}>30 pts</td></tr>
-              <tr><td ${tdL}>✅ Exact 2nd</td><td ${tdR}>10 pts</td></tr>
-              <tr><td ${tdL}>Exact 3rd or off by 1</td><td ${tdR}>7 pts</td></tr>
-              <tr><td ${tdLl}>Off by 2</td><td ${tdRlg}>5 pts</td></tr>
-            </tbody></table>
+            <table style="width:100%;border-collapse:collapse;font-size:13px">
+              <thead><tr style="background:var(--card-bg)">
+                <th style="text-align:left;padding:6px 8px;font-weight:700">Predicted</th>
+                <th style="text-align:right;padding:6px 8px;font-weight:700">Exact</th>
+                <th style="text-align:right;padding:6px 8px;font-weight:700">Off 1</th>
+                <th style="text-align:right;padding:6px 8px;font-weight:700">Off 2</th>
+              </tr></thead>
+              <tbody>
+                <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">🎯 1st</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">32</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">20</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">12</td></tr>
+                <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">2nd</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">24</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">12</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">4</td></tr>
+                <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">3rd</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">20</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">8</td><td style="text-align:right;padding:6px 8px;color:var(--text-dim)">0</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
