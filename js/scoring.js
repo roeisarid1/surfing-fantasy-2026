@@ -5,17 +5,17 @@ export const Scoring = {
 
   // Per-event scores: matrix[predictedRank-1][diff]  diff = 0 (exact), 1, 2, 3+
   EVENT_MEN_SCORES: [
-    [10, 7, 5, 2],  // predicted 1st
-    [ 8, 5, 3, 1],  // predicted 2nd
+    [10, 7, 5, 3],  // predicted 1st
+    [ 8, 5, 3, 2],  // predicted 2nd
     [ 7, 4, 2, 1],  // predicted 3rd
-    [ 6, 3, 1, 0],  // predicted 4th
-    [ 5, 2, 1, 0],  // predicted 5th
+    [ 6, 3, 1, 1],  // predicted 4th
+    [ 5, 2, 1, 1],  // predicted 5th
   ],
 
   EVENT_WOMEN_SCORES: [
     [8, 5, 3],  // predicted 1st
-    [6, 3, 1],  // predicted 2nd
-    [5, 2, 0],  // predicted 3rd
+    [6, 3, 2],  // predicted 2nd
+    [5, 2, 1],  // predicted 3rd
   ],
 
   // Season bonus: same decay ratios as per-event, higher exact values
