@@ -45,7 +45,13 @@ export const Scoring = {
   },
 
   _scorePick(predictedRank, surferName, results, topN, scoreMatrix, isSeason) {
-    const rowScores = scoreMatrix[predictedRank - 1];
+    // For per-event we normalize the *predicted* position to its WSL tier too, so a
+    // pick's target lines up with how the actual result gets tiered. WSL has no
+    // unique 4th — #3/#4 collapse into the semifinal tier (3) — so predicting a
+    // surfer 4th is treated exactly like predicting them 3rd. Otherwise a correct
+    // "4th" pick could never reach an exact match. Season bonus keeps raw, unique ranks.
+    const predScoringRank = isSeason ? predictedRank : this._wslTier(predictedRank, topN);
+    const rowScores = scoreMatrix[predScoringRank - 1];
     const maxPoints = rowScores[0];
     if (!surferName) return { points: 0, actualRank: null, maxPoints };
 
@@ -63,7 +69,7 @@ export const Scoring = {
 
     if (!scoringRank) return { points: 0, actualRank, maxPoints };
 
-    const diff   = Math.abs(predictedRank - scoringRank);
+    const diff   = Math.abs(predScoringRank - scoringRank);
     const points = rowScores[Math.min(diff, rowScores.length - 1)] || 0;
     return { points, actualRank, maxPoints };
   },

@@ -717,8 +717,7 @@ function viewRules() {
             <tbody>
               <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">🎯 1st</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">10</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">7</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">5</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">3</td></tr>
               <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">2nd</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">8</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">5</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">3</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">2</td></tr>
-              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">3rd</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">7</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">4</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">2</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td></tr>
-              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">4th</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">6</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">3</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td></tr>
+              <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">3rd&nbsp;&amp;&nbsp;4th</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">7</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">4</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">2</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td></tr>
               <tr style="border-top:1px solid var(--border)"><td style="padding:6px 8px">5th</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--accent)">5</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">2</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td><td style="text-align:right;padding:6px 8px;color:var(--accent)">1</td></tr>
             </tbody>
           </table>
@@ -743,7 +742,7 @@ function viewRules() {
 
       <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:16px;margin-bottom:24px">
         <div style="font-weight:700;margin-bottom:6px">⚠️ WSL Scoring Tiers (Per-Event Only)</div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">WSL doesn't use unique rankings — surfers share positions. Before calculating how close a prediction was, the actual result is converted to its <strong>WSL scoring tier</strong>:</p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">WSL doesn't use unique rankings — surfers share positions. Before calculating how close a prediction was, <strong>both</strong> your predicted position <strong>and</strong> the actual result are converted to their <strong>WSL scoring tier</strong>. Because #3 and #4 share the semifinal tier, predicting a surfer <strong>4th is scored identically to predicting them 3rd</strong>.</p>
         <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:12px">
           <table style="flex:1;min-width:200px;border-collapse:collapse;font-size:13px">
             <thead><tr style="background:var(--surface)"><th style="text-align:left;padding:6px 8px;font-weight:700">🏄 Men — Actual result</th><th style="text-align:right;padding:6px 8px;font-weight:700">Scoring tier</th></tr></thead>
@@ -765,7 +764,7 @@ function viewRules() {
             </tbody>
           </table>
         </div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Example: predicted <strong>5th</strong>, surfer finishes <strong>#6</strong> → scoring tier = 5 → <strong>exact</strong> → 5 pts. Predicted <strong>4th</strong>, surfer finishes <strong>#7</strong> → scoring tier = 5 → off by 1 → 3 pts.</p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Example: predicted <strong>5th</strong>, surfer finishes <strong>#6</strong> → tier 5 vs tier 5 → <strong>exact</strong> → 5 pts. Predicted <strong>4th</strong>, surfer finishes <strong>#2</strong> → tier 3 vs tier 2 → off by 1 → 4 pts.</p>
         <p style="font-size:12px;color:var(--text-dim);margin:0">Tier normalization does <strong>not</strong> apply to the End of Season Bonus (world rankings use unique positions).</p>
       </div>
 
