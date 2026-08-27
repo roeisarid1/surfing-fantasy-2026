@@ -514,9 +514,9 @@ async function viewEvents() {
           <span style="font-size:16px;font-weight:700">${UI.esc(event.name)}</span>
           ${typeBadge} ${statusBadge}
           ${dateStr ? `<span style="font-size:12px;color:var(--text-dim)">${dateStr}</span>` : ''}
-          <span data-chevron="${bodyId}" style="margin-left:auto;font-size:18px;color:var(--text-muted);line-height:1;transition:transform .2s;display:inline-block">⌄</span>
+          <span data-chevron="${bodyId}" style="margin-left:auto;font-size:18px;color:var(--text-muted);line-height:1;transition:transform .2s;display:inline-block;transform:rotate(-90deg)">⌄</span>
         </div>
-        <div id="${bodyId}">
+        <div id="${bodyId}" style="display:none">
           ${hasPodium ? `
           <div style="padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;gap:32px;flex-wrap:wrap">
             ${podiumCol(topMen, '🏄 Men — Top Finishes')}
