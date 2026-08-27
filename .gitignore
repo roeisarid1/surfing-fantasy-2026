@@ -1,0 +1,3 @@
+# Firestore exports — contain participant names and predictions.
+# Keep them local; they are backups, not source.
+firestore-backup-*.json
