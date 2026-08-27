@@ -443,9 +443,7 @@ async function viewEvents() {
     const typeBadge = event.type === 'season'
       ? `<span class="pill" style="background:var(--yellow);color:#000;font-size:11px">Season Bonus</span>`
       : `<span class="pill pill--gray" style="font-size:11px">Competition</span>`;
-    const statusBadge = event.completed
-      ? `<span class="pill pill--green" style="font-size:11px">✅ Completed</span>`
-      : `<span class="pill pill--gray" style="font-size:11px">⏳ Upcoming</span>`;
+    const statusBadge = UI.eventStatusBadge(event);
     const dateStr = event.date
       ? new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
       : '';
@@ -492,6 +490,9 @@ async function viewEvents() {
       <div id="ebd-${UI.esc(event.id)}-${UI.esc(row.participant.id)}" style="display:none"></div>
     `).join('');
 
+    // WSL awards tied placings (1, 2, 3, 3, 5, 5, 5, 5, 9, …), so these cut-offs
+    // are the scoring tiers rather than a fixed head count — men can show eight
+    // names and women four. Scoring.js collapses the same tiers.
     const topMen = (event.men || []).filter(s => s.rank <= 5).sort((a,b) => a.rank - b.rank);
     const topWomen = (event.women || []).filter(s => s.rank <= 3).sort((a,b) => a.rank - b.rank);
 
@@ -518,8 +519,8 @@ async function viewEvents() {
         <div id="${bodyId}">
           ${hasPodium ? `
           <div style="padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;gap:32px;flex-wrap:wrap">
-            ${podiumCol(topMen, '🏄 Men — Top 5')}
-            ${podiumCol(topWomen, '🏄‍♀️ Women — Top 3')}
+            ${podiumCol(topMen, '🏄 Men — Top Finishes')}
+            ${podiumCol(topWomen, '🏄‍♀️ Women — Top Finishes')}
           </div>` : ''}
           <div>${scoreRows}</div>
         </div>
@@ -867,9 +868,7 @@ async function viewAdmin() {
   const eventCards = events.length === 0
     ? `<p style="font-size:13px;color:var(--text-dim)">No events yet. Add one below.</p>`
     : events.map(ev => {
-        const statusBadge = ev.completed
-          ? `<span class="pill pill--green" style="font-size:11px">✅ Completed</span>`
-          : `<span class="pill pill--gray" style="font-size:11px">⏳ Upcoming</span>`;
+        const statusBadge = UI.eventStatusBadge(ev);
         const typeBadge = ev.type === 'season'
           ? `<span class="pill" style="background:var(--yellow);color:#000;font-size:11px">Season Bonus</span>`
           : `<span class="pill pill--gray" style="font-size:11px">Competition</span>`;
@@ -974,7 +973,9 @@ async function viewAdmin() {
       </div>`;
   }
 
-  function readEventForm() {
+  // `existing` only carries through the fields the form doesn't expose, so an
+  // admin edit doesn't wipe the scraper-supplied WSL status.
+  function readEventForm(existing) {
     const name      = document.getElementById('efName')?.value.trim();
     const date      = document.getElementById('efDate')?.value.trim();
     const order     = parseInt(document.getElementById('efOrder')?.value) || 1;
@@ -984,7 +985,8 @@ async function viewAdmin() {
     try { men   = JSON.parse(document.getElementById('efMen')?.value.trim()  || '[]'); } catch(e) { throw new Error('Men JSON: ' + e.message); }
     try { women = JSON.parse(document.getElementById('efWomen')?.value.trim() || '[]'); } catch(e) { throw new Error('Women JSON: ' + e.message); }
     if (!name) throw new Error('Event name is required');
-    return { name, date, order, type, completed, men, women };
+    const status = existing?.status || (completed ? 'over' : 'upcoming');
+    return { name, date, order, type, status, completed, men, women };
   }
 
   function slugify(name) {
@@ -1032,7 +1034,7 @@ async function viewAdmin() {
       document.getElementById('btnCancelEv-' + id)?.addEventListener('click', () => { formEl.style.display = 'none'; });
       document.getElementById('btnSaveEv-' + id)?.addEventListener('click', async () => {
         try {
-          const data = readEventForm();
+          const data = readEventForm(ev);
           await Events.save(id, data);
           UI.toast('✅ Event updated');
           viewAdmin();

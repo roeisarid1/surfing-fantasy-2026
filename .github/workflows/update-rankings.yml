@@ -1,0 +1,47 @@
+name: Update WSL rankings
+
+on:
+  schedule:
+    # Every 3 hours (UTC) — often enough to follow a running event's placings
+    # and to flip it to completed soon after WSL calls it.
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
+    inputs:
+      year:
+        description: 'Season year to scrape'
+        required: false
+        default: '2026'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-rankings
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Scrape worldsurfleague.com
+        run: node scripts/scrape-wsl.js
+        env:
+          YEAR: ${{ inputs.year || '2026' }}
+
+      - name: Commit if anything changed
+        run: |
+          if [ -z "$(git status --porcelain data/)" ]; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "Update WSL rankings and event results ($(date -u '+%Y-%m-%d %H:%M UTC'))"
+          git push

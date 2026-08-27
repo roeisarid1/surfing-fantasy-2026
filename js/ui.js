@@ -62,6 +62,25 @@ export const UI = {
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
   },
 
+  // `status` mirrors WSL's own schedule wording (see scripts/lib/wsl.js).
+  // Only a completed event counts towards the leaderboard.
+  eventStatusBadge(event) {
+    if (event.completed) {
+      return `<span class="pill pill--green" style="font-size:11px">✅ Completed</span>`;
+    }
+    const map = {
+      live:     ['🔴 Running',  'var(--red)',    '#fff'],
+      on:       ['🔴 Running',  'var(--red)',    '#fff'],
+      standby:  ['🟡 Standby',  'var(--yellow)', '#000'],
+      canceled: ['✕ Canceled',  '',              '']
+    };
+    const entry = map[event.status];
+    if (!entry) return `<span class="pill pill--gray" style="font-size:11px">⏳ Upcoming</span>`;
+    const [label, bg, fg] = entry;
+    const style = bg ? `background:${bg};color:${fg};font-size:11px` : 'font-size:11px';
+    return `<span class="pill${bg ? '' : ' pill--gray'}" style="${style}">${this.esc(label)}</span>`;
+  },
+
   sourceBadge(source) {
     const map = {
       override: ['override', '● Override'],

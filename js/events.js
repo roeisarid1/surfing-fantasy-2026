@@ -7,7 +7,9 @@
      date:      string (ISO date, e.g. "2026-04-15")
      type:      "competition" | "season"
      order:     number (sort order)
-     completed: boolean
+     status:    WSL's schedule wording — "over" | "live" | "on" | "standby"
+                | "upcoming" | "canceled" (written by scripts/scrape-wsl.js)
+     completed: boolean (true only when status is "over" AND results exist)
      men:       Array<{rank, name, country}>
      women:     Array<{rank, name, country}>
    ============================================================ */

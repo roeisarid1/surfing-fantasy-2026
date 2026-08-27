@@ -103,16 +103,68 @@ Participant data, predictions, and admin ranking overrides are stored in **Fireb
 
 ---
 
-## Updating Rankings
+## Updating Rankings & Results
 
-**To manually update after each WSL event:**
+### Automatic (default)
+
+A GitHub Action (`.github/workflows/update-rankings.yml`) runs every 3 hours, scrapes
+worldsurfleague.com, and commits any changes to all three data files:
+
+| File | Contents |
+|---|---|
+| `data/current-rankings-men.json` | Live men's CT standings |
+| `data/current-rankings-women.json` | Live women's CT standings |
+| `data/season-2026.json` | The full calendar plus per-event results |
+
+Run it locally the same way:
+
+```bash
+node scripts/scrape-wsl.js          # current year
+YEAR=2026 node scripts/scrape-wsl.js
+```
+
+You can also trigger it by hand from the repo's **Actions** tab.
+
+#### Where the data comes from
+
+Every WSL page involved is server-rendered, so no browser or API key is needed. Two
+pages cover everything:
+
+- **`/athletes/tour/{mct,wct}?year=YYYY`** — one row per athlete with rank, country and
+  season points, *plus* one cell per calendar event holding that athlete's finish in it.
+  So a single fetch yields both the standings and the whole per-event results matrix.
+- **`/events/YYYY/ct?all=1`** — the calendar: event number, name, dates and status.
+
+#### Tied placings
+
+WSL awards ties: `1, 2, 3, 3, 5, 5, 5, 5, 9, …` — there is no unique 4th, and four
+surfers share 5th. The scraper records those real placings, and `scoring.js` already
+collapses them to the same tiers (`_wslTier`), so a "Top 5" list can show eight names.
+
+#### Safety rails
+
+- The parse must yield at least 20 men, 15 women and 8 events, or the run exits
+  non-zero and writes nothing — a markup change on WSL's side becomes a failed
+  workflow rather than silently emptied results.
+- An event is only marked `completed` when WSL's schedule says **Completed** *and*
+  results actually exist for it. That stops a half-finished event from scoring
+  everyone a zero.
+- An event still running is written with its partial placings but
+  `completed: false`, so it shows live without touching the leaderboard.
+- Event ids are pinned by an alias table in the scraper so Firestore admin
+  overrides keyed to them keep working even when WSL renames or reorders events.
+- Events that vanish from WSL's calendar are kept, with a warning.
+
+---
+
+**To manually override or update after each WSL event:**
 
 ### Option A: Admin Override (recommended)
 1. Go to the **Admin** page in the app
 2. Paste updated JSON into the Men or Women override boxes
 3. Click Save — the leaderboard updates instantly for all users via Firestore
 
-### Option B: Update JSON files (fallback only)
+### Option B: Update JSON files by hand (fallback only)
 Edit `data/current-rankings-men.json` and `data/current-rankings-women.json`:
 
 ```json
@@ -151,6 +203,11 @@ Country codes: `USA`, `AUS`, `BRA`, `RSA`, `JPN`, `ITA`, `FRA`, `PRT`, `CRI`, `M
 SurfingFantasy/
 ├── index.html              # App shell + nav
 ├── styles.css              # Surf theme styles
+├── .github/workflows/
+│   └── update-rankings.yml # 3-hourly scrape + commit of WSL data
+├── scripts/
+│   ├── scrape-wsl.js       # Writes the three data/ files
+│   └── lib/wsl.js          # worldsurfleague.com fetching + parsing
 ├── js/
 │   ├── firebase.js         # Firebase init + Firestore exports
 │   ├── scoring.js          # Pure scoring functions
