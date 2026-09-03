@@ -498,8 +498,8 @@
     "date": "2026-08-25",
     "order": 8,
     "type": "competition",
-    "status": "live",
-    "completed": false,
+    "status": "over",
+    "completed": true,
     "men": [
       { "rank": 1, "name": "Cole Houshmand", "country": "USA" },
       { "rank": 2, "name": "Gabriel Medina", "country": "BRA" },
