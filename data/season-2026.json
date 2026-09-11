@@ -569,9 +569,11 @@
     "date": "2026-09-11",
     "order": 9,
     "type": "competition",
-    "status": "standby",
+    "status": "live",
     "completed": false,
-    "men": [],
+    "men": [
+      { "rank": 33, "name": "Matthew McGillivray", "country": "RSA" }
+    ],
     "women": []
   },
   {
@@ -644,8 +646,8 @@
       { "rank": 15, "name": "Marco Mignot", "country": "FRA" },
       { "rank": 16, "name": "Morgan Cibilic", "country": "AUS" },
       { "rank": 17, "name": "Cole Houshmand", "country": "USA" },
-      { "rank": 18, "name": "Joao Chianca", "country": "BRA" },
-      { "rank": 19, "name": "Callum Robson", "country": "AUS" },
+      { "rank": 18, "name": "Callum Robson", "country": "AUS" },
+      { "rank": 19, "name": "Joao Chianca", "country": "BRA" },
       { "rank": 20, "name": "Seth Moniz", "country": "HAW" },
       { "rank": 21, "name": "Filipe Toledo", "country": "BRA" },
       { "rank": 22, "name": "Barron Mamiya", "country": "HAW" },
