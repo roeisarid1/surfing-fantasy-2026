@@ -569,7 +569,7 @@
     "date": "2026-09-11",
     "order": 9,
     "type": "competition",
-    "status": "live",
+    "status": "standby",
     "completed": false,
     "men": [
       { "rank": 33, "name": "Joel Vaughan", "country": "AUS" },
