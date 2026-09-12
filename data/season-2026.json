@@ -572,9 +572,14 @@
     "status": "live",
     "completed": false,
     "men": [
+      { "rank": 33, "name": "Joel Vaughan", "country": "AUS" },
       { "rank": 33, "name": "Matthew McGillivray", "country": "RSA" }
     ],
-    "women": []
+    "women": [
+      { "rank": 17, "name": "Alyssa Spencer", "country": "USA" },
+      { "rank": 17, "name": "Anat Lelior", "country": "ISR" },
+      { "rank": 17, "name": "Stephanie Gilmore", "country": "AUS" }
+    ]
   },
   {
     "id": "portugal-pro-2026",
