@@ -11,8 +11,8 @@
   { "rank": 10, "name": "Caroline Marks", "country": "USA", "points": 26320 },
   { "rank": 11, "name": "Nadia Erostarbe", "country": "ESP", "points": 23915 },
   { "rank": 12, "name": "Bettylou Sakura Johnson", "country": "HAW", "points": 22575 },
-  { "rank": 13, "name": "Tyler Wright", "country": "AUS", "points": 19545 },
-  { "rank": 14, "name": "Yolanda Hopkins", "country": "POR", "points": 18830 },
+  { "rank": 13, "name": "Tyler Wright", "country": "AUS", "points": 20545 },
+  { "rank": 14, "name": "Yolanda Hopkins", "country": "POR", "points": 19830 },
   { "rank": 15, "name": "Anat Lelior", "country": "ISR", "points": 18545 },
   { "rank": 16, "name": "Alyssa Spencer", "country": "USA", "points": 18170 },
   { "rank": 17, "name": "Stephanie Gilmore", "country": "AUS", "points": 17000 },
@@ -20,6 +20,6 @@
   { "rank": 19, "name": "Tya Zebrowski", "country": "FRA", "points": 15800 },
   { "rank": 20, "name": "Vahine Fierro", "country": "FRA", "points": 14745 },
   { "rank": 21, "name": "Sally Fitzgibbons", "country": "AUS", "points": 13000 },
-  { "rank": 22, "name": "Francisca Veselko", "country": "POR", "points": 10000 },
-  { "rank": 23, "name": "Bella Kenworthy", "country": "USA", "points": 9000 }
+  { "rank": 22, "name": "Bella Kenworthy", "country": "USA", "points": 10000 },
+  { "rank": 23, "name": "Francisca Veselko", "country": "POR", "points": 10000 }
 ]

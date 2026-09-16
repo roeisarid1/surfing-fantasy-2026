@@ -569,7 +569,7 @@
     "date": "2026-09-11",
     "order": 9,
     "type": "competition",
-    "status": "standby",
+    "status": "live",
     "completed": false,
     "men": [
       { "rank": 33, "name": "Joel Vaughan", "country": "AUS" },
@@ -578,6 +578,9 @@
     "women": [
       { "rank": 17, "name": "Alyssa Spencer", "country": "USA" },
       { "rank": 17, "name": "Anat Lelior", "country": "ISR" },
+      { "rank": 17, "name": "Bettylou Sakura Johnson", "country": "HAW" },
+      { "rank": 17, "name": "Francisca Veselko", "country": "POR" },
+      { "rank": 17, "name": "Sally Fitzgibbons", "country": "AUS" },
       { "rank": 17, "name": "Stephanie Gilmore", "country": "AUS" }
     ]
   },
@@ -692,8 +695,8 @@
       { "rank": 19, "name": "Tya Zebrowski", "country": "FRA" },
       { "rank": 20, "name": "Vahine Fierro", "country": "FRA" },
       { "rank": 21, "name": "Sally Fitzgibbons", "country": "AUS" },
-      { "rank": 22, "name": "Francisca Veselko", "country": "POR" },
-      { "rank": 23, "name": "Bella Kenworthy", "country": "USA" }
+      { "rank": 22, "name": "Bella Kenworthy", "country": "USA" },
+      { "rank": 23, "name": "Francisca Veselko", "country": "POR" }
     ]
   }
 ]
