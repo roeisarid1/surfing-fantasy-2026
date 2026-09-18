@@ -569,7 +569,7 @@
     "date": "2026-09-11",
     "order": 9,
     "type": "competition",
-    "status": "standby",
+    "status": "live",
     "completed": false,
     "men": [
       { "rank": 9, "name": "Alan Cleland", "country": "MEX" },
@@ -600,6 +600,7 @@
       { "rank": 33, "name": "Matthew McGillivray", "country": "RSA" }
     ],
     "women": [
+      { "rank": 5, "name": "Luana Silva", "country": "BRA" },
       { "rank": 9, "name": "Brisa Hennessy", "country": "CRC" },
       { "rank": 9, "name": "Caitlin Simmers", "country": "USA" },
       { "rank": 9, "name": "Caroline Marks", "country": "USA" },
