@@ -640,7 +640,7 @@
     "date": "2026-10-16",
     "order": 10,
     "type": "competition",
-    "status": "upcoming",
+    "status": "standby",
     "completed": false,
     "men": [],
     "women": []
