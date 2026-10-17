@@ -640,7 +640,7 @@
     "date": "2026-10-16",
     "order": 10,
     "type": "competition",
-    "status": "live",
+    "status": "standby",
     "completed": false,
     "men": [
       { "rank": 9, "name": "Connor O'Leary", "country": "JPN" },
@@ -660,6 +660,7 @@
       { "rank": 17, "name": "Samuel Pupo", "country": "BRA" }
     ],
     "women": [
+      { "rank": 5, "name": "Carissa Moore", "country": "HAW" },
       { "rank": 5, "name": "Francisca Veselko", "country": "POR" },
       { "rank": 9, "name": "Caroline Marks", "country": "USA" },
       { "rank": 9, "name": "Gabriela Bryan", "country": "HAW" },
@@ -769,9 +770,9 @@
       { "rank": 18, "name": "Brisa Hennessy", "country": "CRC" },
       { "rank": 19, "name": "Tya Zebrowski", "country": "FRA" },
       { "rank": 20, "name": "Vahine Fierro", "country": "FRA" },
-      { "rank": 21, "name": "Francisca Veselko", "country": "POR" },
-      { "rank": 22, "name": "Sally Fitzgibbons", "country": "AUS" },
-      { "rank": 23, "name": "Bella Kenworthy", "country": "USA" }
+      { "rank": 21, "name": "Sally Fitzgibbons", "country": "AUS" },
+      { "rank": 22, "name": "Bella Kenworthy", "country": "USA" },
+      { "rank": 23, "name": "Francisca Veselko", "country": "POR" }
     ]
   }
 ]
