@@ -640,7 +640,7 @@
     "date": "2026-10-16",
     "order": 10,
     "type": "competition",
-    "status": "standby",
+    "status": "live",
     "completed": false,
     "men": [
       { "rank": 9, "name": "Connor O'Leary", "country": "JPN" },
@@ -660,6 +660,7 @@
       { "rank": 17, "name": "Samuel Pupo", "country": "BRA" }
     ],
     "women": [
+      { "rank": 5, "name": "Francisca Veselko", "country": "POR" },
       { "rank": 9, "name": "Caroline Marks", "country": "USA" },
       { "rank": 9, "name": "Gabriela Bryan", "country": "HAW" },
       { "rank": 9, "name": "Luana Silva", "country": "BRA" },
@@ -757,8 +758,8 @@
       { "rank": 7, "name": "Caitlin Simmers", "country": "USA" },
       { "rank": 8, "name": "Lakey Peterson", "country": "USA" },
       { "rank": 9, "name": "Isabella Nichols", "country": "AUS" },
-      { "rank": 10, "name": "Caroline Marks", "country": "USA" },
-      { "rank": 11, "name": "Bettylou Sakura Johnson", "country": "HAW" },
+      { "rank": 10, "name": "Bettylou Sakura Johnson", "country": "HAW" },
+      { "rank": 11, "name": "Caroline Marks", "country": "USA" },
       { "rank": 12, "name": "Nadia Erostarbe", "country": "ESP" },
       { "rank": 13, "name": "Tyler Wright", "country": "AUS" },
       { "rank": 14, "name": "Yolanda Hopkins", "country": "POR" },
