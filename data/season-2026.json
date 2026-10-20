@@ -643,6 +643,9 @@
     "status": "standby",
     "completed": false,
     "men": [
+      { "rank": 5, "name": "Ethan Ewing", "country": "AUS" },
+      { "rank": 5, "name": "Morgan Cibilic", "country": "AUS" },
+      { "rank": 5, "name": "Seth Moniz", "country": "HAW" },
       { "rank": 9, "name": "Connor O'Leary", "country": "JPN" },
       { "rank": 9, "name": "Filipe Toledo", "country": "BRA" },
       { "rank": 9, "name": "Jack Robinson", "country": "AUS" },
@@ -661,6 +664,7 @@
     ],
     "women": [
       { "rank": 5, "name": "Carissa Moore", "country": "HAW" },
+      { "rank": 5, "name": "Erin Brooks", "country": "CAN" },
       { "rank": 5, "name": "Francisca Veselko", "country": "POR" },
       { "rank": 9, "name": "Caroline Marks", "country": "USA" },
       { "rank": 9, "name": "Gabriela Bryan", "country": "HAW" },
@@ -751,8 +755,8 @@
     ],
     "women": [
       { "rank": 1, "name": "Carissa Moore", "country": "HAW" },
-      { "rank": 2, "name": "Gabriela Bryan", "country": "HAW" },
-      { "rank": 3, "name": "Molly Picklum", "country": "AUS" },
+      { "rank": 2, "name": "Molly Picklum", "country": "AUS" },
+      { "rank": 3, "name": "Gabriela Bryan", "country": "HAW" },
       { "rank": 4, "name": "Erin Brooks", "country": "CAN" },
       { "rank": 5, "name": "Sawyer Lindblad", "country": "USA" },
       { "rank": 6, "name": "Luana Silva", "country": "BRA" },
@@ -770,9 +774,9 @@
       { "rank": 18, "name": "Brisa Hennessy", "country": "CRC" },
       { "rank": 19, "name": "Tya Zebrowski", "country": "FRA" },
       { "rank": 20, "name": "Vahine Fierro", "country": "FRA" },
-      { "rank": 21, "name": "Sally Fitzgibbons", "country": "AUS" },
-      { "rank": 22, "name": "Bella Kenworthy", "country": "USA" },
-      { "rank": 23, "name": "Francisca Veselko", "country": "POR" }
+      { "rank": 21, "name": "Francisca Veselko", "country": "POR" },
+      { "rank": 22, "name": "Sally Fitzgibbons", "country": "AUS" },
+      { "rank": 23, "name": "Bella Kenworthy", "country": "USA" }
     ]
   }
 ]
