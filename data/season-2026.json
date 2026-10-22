@@ -663,6 +663,8 @@
       { "rank": 17, "name": "Samuel Pupo", "country": "BRA" }
     ],
     "women": [
+      { "rank": 3, "name": "Bettylou Sakura Johnson", "country": "HAW" },
+      { "rank": 3, "name": "Lakey Peterson", "country": "USA" },
       { "rank": 5, "name": "Carissa Moore", "country": "HAW" },
       { "rank": 5, "name": "Erin Brooks", "country": "CAN" },
       { "rank": 5, "name": "Francisca Veselko", "country": "POR" },
@@ -759,8 +761,8 @@
       { "rank": 3, "name": "Gabriela Bryan", "country": "HAW" },
       { "rank": 4, "name": "Erin Brooks", "country": "CAN" },
       { "rank": 5, "name": "Sawyer Lindblad", "country": "USA" },
-      { "rank": 6, "name": "Luana Silva", "country": "BRA" },
-      { "rank": 7, "name": "Caitlin Simmers", "country": "USA" },
+      { "rank": 6, "name": "Caitlin Simmers", "country": "USA" },
+      { "rank": 7, "name": "Luana Silva", "country": "BRA" },
       { "rank": 8, "name": "Lakey Peterson", "country": "USA" },
       { "rank": 9, "name": "Isabella Nichols", "country": "AUS" },
       { "rank": 10, "name": "Bettylou Sakura Johnson", "country": "HAW" },
