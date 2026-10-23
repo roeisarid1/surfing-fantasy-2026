@@ -1,6 +1,6 @@
 [
-  { "rank": 1, "name": "Carissa Moore", "country": "HAW", "points": 47065 },
-  { "rank": 2, "name": "Molly Picklum", "country": "AUS", "points": 46750 },
+  { "rank": 1, "name": "Molly Picklum", "country": "AUS", "points": 48950 },
+  { "rank": 2, "name": "Carissa Moore", "country": "HAW", "points": 47065 },
   { "rank": 3, "name": "Gabriela Bryan", "country": "HAW", "points": 44865 },
   { "rank": 4, "name": "Erin Brooks", "country": "CAN", "points": 42745 },
   { "rank": 5, "name": "Sawyer Lindblad", "country": "USA", "points": 42055 },
@@ -19,7 +19,7 @@
   { "rank": 18, "name": "Brisa Hennessy", "country": "CRC", "points": 17085 },
   { "rank": 19, "name": "Tya Zebrowski", "country": "FRA", "points": 16800 },
   { "rank": 20, "name": "Vahine Fierro", "country": "FRA", "points": 15745 },
-  { "rank": 21, "name": "Francisca Veselko", "country": "POR", "points": 14745 },
-  { "rank": 22, "name": "Sally Fitzgibbons", "country": "AUS", "points": 14000 },
-  { "rank": 23, "name": "Bella Kenworthy", "country": "USA", "points": 13745 }
+  { "rank": 21, "name": "Sally Fitzgibbons", "country": "AUS", "points": 14000 },
+  { "rank": 22, "name": "Bella Kenworthy", "country": "USA", "points": 13745 },
+  { "rank": 23, "name": "Francisca Veselko", "country": "POR", "points": 11000 }
 ]

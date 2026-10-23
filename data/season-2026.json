@@ -640,9 +640,13 @@
     "date": "2026-10-16",
     "order": 10,
     "type": "competition",
-    "status": "standby",
+    "status": "live",
     "completed": false,
     "men": [
+      { "rank": 1, "name": "Griffin Colapinto", "country": "USA" },
+      { "rank": 2, "name": "Gabriel Medina", "country": "BRA" },
+      { "rank": 3, "name": "Italo Ferreira", "country": "BRA" },
+      { "rank": 3, "name": "Yago Dora", "country": "BRA" },
       { "rank": 5, "name": "Ethan Ewing", "country": "AUS" },
       { "rank": 5, "name": "Morgan Cibilic", "country": "AUS" },
       { "rank": 5, "name": "Seth Moniz", "country": "HAW" },
@@ -663,6 +667,8 @@
       { "rank": 17, "name": "Samuel Pupo", "country": "BRA" }
     ],
     "women": [
+      { "rank": 1, "name": "Molly Picklum", "country": "AUS" },
+      { "rank": 2, "name": "Caitlin Simmers", "country": "USA" },
       { "rank": 3, "name": "Bettylou Sakura Johnson", "country": "HAW" },
       { "rank": 3, "name": "Lakey Peterson", "country": "USA" },
       { "rank": 5, "name": "Carissa Moore", "country": "HAW" },
@@ -721,10 +727,10 @@
     "men": [
       { "rank": 1, "name": "Yago Dora", "country": "BRA" },
       { "rank": 2, "name": "Italo Ferreira", "country": "BRA" },
-      { "rank": 3, "name": "Miguel Pupo", "country": "BRA" },
-      { "rank": 4, "name": "Leonardo Fioravanti", "country": "ITA" },
-      { "rank": 5, "name": "Gabriel Medina", "country": "BRA" },
-      { "rank": 6, "name": "Griffin Colapinto", "country": "USA" },
+      { "rank": 3, "name": "Griffin Colapinto", "country": "USA" },
+      { "rank": 4, "name": "Gabriel Medina", "country": "BRA" },
+      { "rank": 5, "name": "Miguel Pupo", "country": "BRA" },
+      { "rank": 6, "name": "Leonardo Fioravanti", "country": "ITA" },
       { "rank": 7, "name": "Ethan Ewing", "country": "AUS" },
       { "rank": 8, "name": "Kanoa Igarashi", "country": "JPN" },
       { "rank": 9, "name": "Kauli Vaast", "country": "FRA" },
@@ -756,8 +762,8 @@
       { "rank": 35, "name": "Oscar Berry", "country": "AUS" }
     ],
     "women": [
-      { "rank": 1, "name": "Carissa Moore", "country": "HAW" },
-      { "rank": 2, "name": "Molly Picklum", "country": "AUS" },
+      { "rank": 1, "name": "Molly Picklum", "country": "AUS" },
+      { "rank": 2, "name": "Carissa Moore", "country": "HAW" },
       { "rank": 3, "name": "Gabriela Bryan", "country": "HAW" },
       { "rank": 4, "name": "Erin Brooks", "country": "CAN" },
       { "rank": 5, "name": "Sawyer Lindblad", "country": "USA" },
@@ -776,9 +782,9 @@
       { "rank": 18, "name": "Brisa Hennessy", "country": "CRC" },
       { "rank": 19, "name": "Tya Zebrowski", "country": "FRA" },
       { "rank": 20, "name": "Vahine Fierro", "country": "FRA" },
-      { "rank": 21, "name": "Francisca Veselko", "country": "POR" },
-      { "rank": 22, "name": "Sally Fitzgibbons", "country": "AUS" },
-      { "rank": 23, "name": "Bella Kenworthy", "country": "USA" }
+      { "rank": 21, "name": "Sally Fitzgibbons", "country": "AUS" },
+      { "rank": 22, "name": "Bella Kenworthy", "country": "USA" },
+      { "rank": 23, "name": "Francisca Veselko", "country": "POR" }
     ]
   }
 ]
