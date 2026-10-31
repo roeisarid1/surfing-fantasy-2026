@@ -693,7 +693,10 @@
     "status": "standby",
     "completed": false,
     "men": [],
-    "women": []
+    "women": [
+      { "rank": 9, "name": "Caroline Marks", "country": "USA" },
+      { "rank": 9, "name": "Gabriela Bryan", "country": "HAW" }
+    ]
   },
   {
     "id": "pipe-masters-2026",
@@ -767,16 +770,16 @@
       { "rank": 2, "name": "Carissa Moore", "country": "HAW" },
       { "rank": 3, "name": "Gabriela Bryan", "country": "HAW" },
       { "rank": 4, "name": "Erin Brooks", "country": "CAN" },
-      { "rank": 5, "name": "Sawyer Lindblad", "country": "USA" },
-      { "rank": 6, "name": "Caitlin Simmers", "country": "USA" },
+      { "rank": 5, "name": "Caitlin Simmers", "country": "USA" },
+      { "rank": 6, "name": "Sawyer Lindblad", "country": "USA" },
       { "rank": 7, "name": "Luana Silva", "country": "BRA" },
       { "rank": 8, "name": "Lakey Peterson", "country": "USA" },
       { "rank": 9, "name": "Isabella Nichols", "country": "AUS" },
       { "rank": 10, "name": "Bettylou Sakura Johnson", "country": "HAW" },
       { "rank": 11, "name": "Caroline Marks", "country": "USA" },
       { "rank": 12, "name": "Nadia Erostarbe", "country": "ESP" },
-      { "rank": 13, "name": "Tyler Wright", "country": "AUS" },
-      { "rank": 14, "name": "Yolanda Hopkins", "country": "POR" },
+      { "rank": 13, "name": "Yolanda Hopkins", "country": "POR" },
+      { "rank": 14, "name": "Tyler Wright", "country": "AUS" },
       { "rank": 15, "name": "Anat Lelior", "country": "ISR" },
       { "rank": 16, "name": "Alyssa Spencer", "country": "USA" },
       { "rank": 17, "name": "Stephanie Gilmore", "country": "AUS" },
